@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "linebreak-style": 0, // Desativa a regra que força estilos de quebra de linha
+    "prettier/prettier": ["error", {"endOfLine": "auto"}] // Adiciona esta linha para permitir qualquer tipo de quebra de linha
+  }
+}
