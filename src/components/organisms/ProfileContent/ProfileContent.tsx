@@ -3,6 +3,8 @@ import {View, StyleSheet} from 'react-native';
 import ProfileInfo from '../../molecules/ProfileInfo/ProfileInfo';
 import Calendar from '../../molecules/Calendar/Calendar';
 import TimeSelector from '../../molecules/TimeSelector/TimeSelector';
+import {useSelector} from 'react-redux';
+import colors from '../../../styles/colors/Colors';
 
 interface ProfileContentProps {
   name: string;
@@ -27,8 +29,12 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
   times,
   blockedDates,
 }) => {
+  const service = useSelector((state: any) => state.service);
+  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const themeColors = colors[userRole] || colors.user;
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <ProfileInfo
         name={name}
         description={description}

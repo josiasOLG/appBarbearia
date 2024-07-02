@@ -2,16 +2,13 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  Button,
   TouchableOpacity,
   Text,
   StatusBar,
+  ScrollView,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
 import ProfileHeader from '../../components/molecules/ProfileHeader/ProfileHeader';
 import ProfileContent from '../../components/organisms/ProfileContent/ProfileContent';
-import IconBackBlack from '../../assets/icons/BackBlack.svg';
-import {useParallaxEffect} from '../../hooks/useParallaxEffect';
 import {useSelector} from 'react-redux';
 import colors from '../../styles/colors/Colors';
 import LinearGradient from 'react-native-linear-gradient';
@@ -23,7 +20,6 @@ const HEADER_HEIGHT = 150;
 const BarberDetailsScreen: React.FC = ({navigation}) => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
-  const {scrollHandler, headerAnimatedStyle} = useParallaxEffect();
   const service = useSelector((state: any) => state.service);
   const userRole = service.selectedService?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
@@ -63,10 +59,8 @@ const BarberDetailsScreen: React.FC = ({navigation}) => {
   return (
     <LinearGradient colors={['#d2e2ef', '#f1f6fa']} style={styles.gradient}>
       <StatusBar backgroundColor={themeColors.primary} />
-      <Animated.ScrollView
-        onScroll={scrollHandler}
-        scrollEventThrottle={16}
-        contentContainerStyle={{paddingTop: HEADER_HEIGHT}}>
+      {/* <ProfileHeader onBackPress={handleBackPress} /> */}
+      <ScrollView>
         <View style={[styles.contentContainer]}>
           <ProfileContent
             name="Josias Oliveira"
@@ -97,10 +91,7 @@ const BarberDetailsScreen: React.FC = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-      </Animated.ScrollView>
-      <Animated.View style={[styles.header, headerAnimatedStyle]}>
-        <ProfileHeader onBackPress={handleBackPress} />
-      </Animated.View>
+      </ScrollView>
     </LinearGradient>
   );
 };
@@ -123,8 +114,6 @@ const styles = StyleSheet.create({
     right: 0,
     height: HEADER_HEIGHT,
     zIndex: 1,
-  },
-  fixedHeader: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     flexDirection: 'row',
     alignItems: 'center',
@@ -132,7 +121,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
-    zIndex: 2,
   },
   backButton: {
     marginLeft: 10,
@@ -143,7 +131,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   bottomButtonContainer: {
-    padding: 0,
+    padding: 20,
   },
   button: {
     flexDirection: 'row',

@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, ImageSourcePropType} from 'react-native';
 import typography from '../../../styles/typographys/typography';
+import {useSelector} from 'react-redux';
+import colors from '../../../styles/colors/Colors';
 
 interface ProfileInfoProps {
   name: string;
@@ -15,8 +17,12 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
   description2,
   imageUrl,
 }) => {
+  const service = useSelector((state: any) => state.service);
+  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const themeColors = colors[userRole] || colors.user;
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: themeColors.primary}]}>
       <View style={styles.containerText}>
         <Image source={imageUrl} style={styles.image} />
         <View style={styles.textContainer}>
@@ -36,6 +42,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     flex: 1,
+
+    marginBottom: 20,
   },
   containerText: {
     flexDirection: 'row',
@@ -54,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   name: {
-    color: '#333',
+    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 10,
@@ -62,13 +70,13 @@ const styles = StyleSheet.create({
   description: {
     marginTop: 10,
     fontSize: 16,
-    color: '#666',
+    color: '#fff',
     textAlign: 'left',
   },
   description2: {
     marginTop: 10,
     fontSize: 14,
-    color: '#999999',
+    color: '#fff',
     textAlign: 'left',
   },
 });

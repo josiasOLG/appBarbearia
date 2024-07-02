@@ -24,11 +24,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({onBackPress}) => {
 };
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    height: '70%',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-  },
+  backgroundImage: {},
   backButton: {
     margin: 20,
   },

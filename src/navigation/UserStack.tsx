@@ -55,24 +55,28 @@ export const UserStackNavigator = () => {
       <UserStack.Screen
         name="BarberDetailsScreen"
         component={BarberDetailsScreen}
-        options={customHeaderOption(
-          'transparent',
-          '#333',
-          '',
-          true,
-          'transparent',
-        )}
+        options={{
+          headerTitle: 'Agendar',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColorsService.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
       />
       <UserStack.Screen
         name="ServiceBarberSelectionScreen"
         component={ServiceBarberSelectionScreen}
-        options={customHeaderOption(
-          'transparent',
-          '#333',
-          '',
-          true,
-          'transparent',
-        )}
+        options={{
+          headerTitle: 'Agendar',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColorsService.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
       />
 
       <UserStack.Screen
