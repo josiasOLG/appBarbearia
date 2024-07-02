@@ -4,8 +4,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Modal,
-  Image,
+  ScrollView,
   StatusBar,
 } from 'react-native';
 import {useSelector} from 'react-redux';
@@ -13,9 +12,12 @@ import colors from '../../styles/colors/Colors';
 import typography from '../../styles/typographys/typography';
 import CustomIcon from '../../components/atoms/Icon/Icon';
 import LinearGradient from 'react-native-linear-gradient';
+import ProfileCard from '../../components/molecules/ProfileCard/ProfileCard';
+import InfoCard from '../../components/molecules/InfoCard/InfoCard';
+import ConfirmationModal from '../../components/organisms/ConfirmationModal/ConfirmationModal';
 
 const AppointmentSummaryScreen: React.FC = ({route, navigation}) => {
-  const {selectedServices} = route.params;
+  const {selectedServices, date, time, address} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const service = useSelector((state: any) => state.service);
   const userRole = service.selectedService?.toLowerCase() || 'user';
@@ -29,82 +31,55 @@ const AppointmentSummaryScreen: React.FC = ({route, navigation}) => {
   return (
     <LinearGradient colors={['#d2e2ef', '#f1f6fa']} style={styles.gradient}>
       <StatusBar backgroundColor={themeColors.primary} />
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Image
-            source={require('../../assets/images/barber.jpg')}
-            style={styles.barberImage}
-          />
-          <Text style={[styles.barberName, typography.bold]}>
-            Josias Oliveira
-          </Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={[styles.label, typography.bold]}>Data:</Text>
-          <Text style={styles.value}>2024-07-01</Text>
-          <Text style={[styles.label, typography.bold]}>Hora:</Text>
-          <Text style={styles.value}>10:00</Text>
-          <Text style={[styles.label, typography.bold]}>Endereço:</Text>
-          <Text style={styles.value}>Rua Exemplo, 123</Text>
-          <Text style={[styles.label, typography.bold]}>Serviços:</Text>
-          {selectedServices.map(service => (
-            <Text key={service} style={styles.value}>
-              {service}
-            </Text>
-          ))}
-        </View>
-        <View style={styles.bottomButtonContainer}>
-          <TouchableOpacity
-            style={[styles.button, {backgroundColor: themeColors.primary}]}
-            onPress={() => setModalVisible(true)}>
-            <Text style={[styles.buttonTextLeft, typography.boldItalic]}>
-              Agendar
-            </Text>
-            <CustomIcon
-              name="check"
-              color={'#FFF'}
-              size={10}
-              type="feather"
-              style={[styles.buttonTextRight, typography.extraLightItalic]}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={[styles.modalText, typography.bold]}>
-              Confirmar Agendamento?
-            </Text>
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={[
-                  styles.modalButton,
-                  {backgroundColor: themeColors.primary},
-                ]}
-                onPress={handleConfirm}>
-                <Text style={[styles.modalButtonText, typography.bold]}>
-                  Confirmar
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.modalButton,
-                  {backgroundColor: themeColors.secondary},
-                ]}
-                onPress={() => setModalVisible(false)}>
-                <Text style={[styles.modalButtonText, typography.bold]}>
-                  Cancelar
-                </Text>
-              </TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.container}>
+          <ProfileCard />
+          <View>
+            <View style={styles.row}>
+              <InfoCard icon="calendar" label="Data" value={date} />
+              <InfoCard icon="clock" label="Hora" value={time} />
             </View>
           </View>
+          <InfoCard icon="map-pin" label="Endereço" value={address} />
+          <View>
+            <View style={styles.row}>
+              {selectedServices.map((service, index) => (
+                <InfoCard
+                  key={index}
+                  icon="scissors"
+                  label={`Serviço ${index + 1}`}
+                  value={service}
+                />
+              ))}
+            </View>
+          </View>
+          <Text style={styles.infoText}>
+            Por favor, verifique as informações acima antes de confirmar seu
+            agendamento. Certifique-se de que todos os detalhes estão corretos.
+          </Text>
+          <View style={styles.bottomButtonContainer}>
+            <TouchableOpacity
+              style={[styles.button, {backgroundColor: themeColors.primary}]}
+              onPress={() => setModalVisible(true)}>
+              <Text style={[styles.buttonTextLeft, typography.boldItalic]}>
+                Agendar
+              </Text>
+              <CustomIcon
+                name="check"
+                color={'#FFF'}
+                size={20}
+                type="feather"
+                style={styles.buttonIcon}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-      </Modal>
+      </ScrollView>
+      <ConfirmationModal
+        visible={modalVisible}
+        onConfirm={handleConfirm}
+        onCancel={() => setModalVisible(false)}
+      />
     </LinearGradient>
   );
 };
@@ -113,34 +88,27 @@ const styles = StyleSheet.create({
   gradient: {
     flex: 1,
   },
-  container: {
-    flex: 1,
+  scrollViewContent: {
+    flexGrow: 1,
     padding: 20,
   },
-  header: {
+  container: {
+    flex: 1,
+  },
+  row: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
+    justifyContent: 'space-between',
+    gap: 10,
   },
-  barberImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginRight: 20,
+  column: {
+    flex: 1,
   },
-  barberName: {
-    fontSize: 24,
-  },
-  infoContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 18,
-    marginTop: 10,
-  },
-  value: {
-    fontSize: 16,
-    marginBottom: 5,
+  infoText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#666',
+    marginVertical: 20,
+    textAlign: 'center',
   },
   bottomButtonContainer: {
     padding: 16,
@@ -160,44 +128,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'left',
   },
-  buttonTextRight: {
-    flex: 1,
-    fontSize: 18,
-    color: '#fff',
-    textAlign: 'right',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: 300,
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  modalButton: {
-    flex: 1,
-    padding: 10,
-    marginHorizontal: 5,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  modalButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  buttonIcon: {
+    marginLeft: 10,
   },
 });
 

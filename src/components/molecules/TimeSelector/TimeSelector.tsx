@@ -49,12 +49,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 5,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
   timeButton: {
-    backgroundColor: '#ddd',
+    backgroundColor: 'transparent',
+    borderColor: '#333',
+    borderWidth: 1,
     padding: 10,
-    margin: 4,
+    marginHorizontal: 11,
+    marginVertical: 5,
     borderRadius: 5,
   },
   timeText: {

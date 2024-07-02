@@ -28,7 +28,9 @@ const services = [
   },
 ];
 
-const ServiceBarberSelectionScreen: React.FC = ({navigation}) => {
+const ServiceBarberSelectionScreen: React.FC = ({route, navigation}) => {
+  const {date, time} = route.params;
+
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const service = useSelector((state: any) => state.service);
   const userRole = service.selectedService?.toLowerCase() || 'user';
@@ -43,7 +45,11 @@ const ServiceBarberSelectionScreen: React.FC = ({navigation}) => {
   };
 
   const handleContinue = () => {
-    navigation.navigate('AppointmentSummaryScreen', {selectedServices});
+    navigation.navigate('AppointmentSummaryScreen', {
+      selectedServices,
+      date,
+      time,
+    });
   };
 
   return (

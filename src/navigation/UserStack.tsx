@@ -21,6 +21,7 @@ import colors from '../styles/colors/Colors';
 import ServiceSelectionScreen from '../screens/base/ServiceSelectionScreen';
 import BarberDetailsScreen from '../screens/User/BarberDetailsScreen';
 import ServiceBarberSelectionScreen from '../screens/User/ServiceSelectionScreen';
+import AppointmentSummaryScreen from '../screens/User/AppointmentSummaryScreen';
 
 const UserStack = createStackNavigator();
 
@@ -68,6 +69,19 @@ export const UserStackNavigator = () => {
       <UserStack.Screen
         name="ServiceBarberSelectionScreen"
         component={ServiceBarberSelectionScreen}
+        options={{
+          headerTitle: 'Agendar',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColorsService.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <UserStack.Screen
+        name="AppointmentSummaryScreen"
+        component={AppointmentSummaryScreen}
         options={{
           headerTitle: 'Agendar',
           headerStyle: [
