@@ -91,14 +91,18 @@ const BarberTab: React.FC<any> = () => {
           response.headers['access-token'],
         );
 
-        const {userId} = response.data;
-
+        const {userId, descricao, certificacoes, username, image} =
+          response.data;
+        console.log(response.data);
         dispatch(
           setUser({
             id: userId,
-            username: user.displayName || '',
+            username: user.displayName || username,
+            descricao: descricao || '',
+            certificacoes: certificacoes || '',
+            image: image || '',
             isLoggedIn: true,
-            type: 'barber',
+            type: 'BARBER',
           }),
         );
         setIsLoading(false);
@@ -146,17 +150,36 @@ const BarberTab: React.FC<any> = () => {
     setIsLoading(true);
     try {
       const response = await AuthService.login(data);
-      const {user_id, display_name, role} = response.data;
+      const {user_id, display_name, role, descricao, certificacoes, image} =
+        response.data;
+
+      await Keychain.setGenericPassword(
+        'accessToken',
+        response.headers['access-token'],
+        {service: 'accessToken'},
+      );
+      await Keychain.setGenericPassword(
+        'refreshToken',
+        response.headers['refresh-token'],
+        {service: 'refreshToken'},
+      );
+      await Keychain.setGenericPassword('userId', user_id, {service: 'userId'});
+
       dispatch(
         setUser({
           id: user_id,
           username: display_name || '',
           isLoggedIn: true,
           type: role,
+          descricao: descricao,
+          certificacoes: certificacoes,
+          image: image,
         }),
       );
-      navigation.navigate('HomeScreen');
+
+      navigation.navigate('BarberHomeScreen');
     } catch (error) {
+      console.log('error >>', error);
       setIsLoading(false);
     }
   };

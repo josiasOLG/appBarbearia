@@ -20,8 +20,9 @@ const HEADER_HEIGHT = 150;
 const BarberDetailsScreen: React.FC = ({navigation}) => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
+  const user = useSelector((state: any) => state.user);
   const service = useSelector((state: any) => state.service);
-  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
   const times = [

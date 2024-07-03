@@ -3,6 +3,10 @@ export interface User {
   username: string;
   isLoggedIn: boolean;
   type: 'USER' | 'BARBER' | 'STYLIST';
+  profileImage?: string;
+  descricao?: string;
+  image?: string;
+  certificacoes?: string;
 }
 
 export interface UserState {

@@ -27,10 +27,15 @@ const searchUsers = async (query: string, service: string) => {
   });
 };
 
+const updateProfile = async (userId: string, data: any) => {
+  return ApiClient.put(`/users/${userId}`, data);
+};
+
 export const UserService = {
   validateCode,
   resetPassword,
   register,
   updateUserService,
   searchUsers,
+  updateProfile,
 };

@@ -19,8 +19,9 @@ import ConfirmationModal from '../../components/organisms/ConfirmationModal/Conf
 const AppointmentSummaryScreen: React.FC = ({route, navigation}) => {
   const {selectedServices, date, time, address} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
+  const user = useSelector((state: any) => state.user);
   const service = useSelector((state: any) => state.service);
-  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
   const handleConfirm = () => {

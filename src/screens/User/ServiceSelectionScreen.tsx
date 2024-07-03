@@ -32,8 +32,9 @@ const ServiceBarberSelectionScreen: React.FC = ({route, navigation}) => {
   const {date, time} = route.params;
 
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const user = useSelector((state: any) => state.user);
   const service = useSelector((state: any) => state.service);
-  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
   const handleServiceToggle = (service: string) => {

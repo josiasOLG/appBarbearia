@@ -31,10 +31,10 @@ const ListaCartoesScreen: React.FC = ({navigation}) => {
   const [selectedCardItem, setSelectedCardItem] = useState<any | null>(null);
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const user = useSelector((state: any) => state.user);
   const [modalVisible, setModalVisible] = useState<boolean>(false); // Estado para controlar a visibilidade do modal
+  const user = useSelector((state: any) => state.user);
   const service = useSelector((state: any) => state.service);
-  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
   const options = [

@@ -10,64 +10,25 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import MenuIcon from '../../assets/icons/menu.svg';
-import SearchIcon from '../../assets/icons/search.svg';
 import IconCalendar from '../../assets/icons/iconCalendar.svg';
-
 import IconCheckList from '../../assets/icons/iconChecklist.svg';
 import IconConfig from '../../assets/icons/iconConfig.svg';
-import IconPromotion from '../../assets/icons/iconPromotion.svg';
 import LinearGradient from 'react-native-linear-gradient';
 import {GlobalLayoutStyles} from '../../styles/GlobalLayoutStyles';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import typography from '../../styles/typographys/typography';
 import {KeyboardAvoidingView} from 'react-native';
-import {assinantes} from '../../api/SubscriptionService';
 import {useSelector} from 'react-redux';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import Skeleton from '../../components/atoms/Skeleton/Skeleton';
-import {useFocusEffect} from '@react-navigation/native';
 import colors from '../../styles/colors/Colors'; // Importar cores
+import CustomIcon from '../../components/atoms/Icon/Icon';
 
 interface HomeScreenProps {
   navigation: any;
 }
 
 const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
-  const [searchText, setSearchText] = useState('');
-  const [filteredData, setFilteredData] = useState<any[]>([]);
-  const [subscribers, setSubscribers] = useState<any[]>([]);
-  const [hasSubscription, setHasSubscription] = useState(true);
-  const [loading, setLoading] = useState(true);
   const user = useSelector((state: any) => state.user);
-  const userRole = user?.user.type?.toLowerCase() || 'user'; // Garantir que o role esteja definido e em minúsculas
-  const themeColors = colors[userRole] || colors.user; // Garantir que o role seja uma chave válida
-
-  useFocusEffect(
-    useCallback(() => {
-      const fetchSubscribers = async () => {
-        try {
-          const userId = user?.user?.id; // Substitua pelo ID do usuário real
-          const data = await assinantes(userId);
-          setSubscribers(data.customers);
-          setHasSubscription(false);
-          console.log('fetchSubscribers >>', data);
-        } catch (error) {
-          console.error('Error fetching subscribers:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchSubscribers();
-    }, [user]),
-  );
-
-  const handleMenuPress = () => {};
-  const handleSearch = (text: string) => {
-    setSearchText(text);
-  };
-
+  const userRole = user?.user.type?.toLowerCase() || 'user';
+  const themeColors = colors[userRole] || colors.user;
   return (
     <LinearGradient
       colors={[themeColors.primary, themeColors.primary]}
@@ -87,14 +48,16 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
           </View>
           <View style={[styles.middleSection]}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('BarberListScreen')}>
+              onPress={() => navigation.navigate('ServiceRegistrationScreen')}>
               <View
                 style={[styles.card, {backgroundColor: themeColors.secondary}]}>
                 <View style={styles.colum1}>
                   <Text style={[styles.cardTitle, typography.semiBold]}>
-                    Favoritos
+                    Serviços
                   </Text>
-                  <Text style={styles.cardText}>Barbeiros favoritos</Text>
+                  <Text style={styles.cardText}>
+                    Cadastro de serviços prestados
+                  </Text>
                 </View>
                 <View style={styles.colum2}>
                   <View
@@ -102,7 +65,12 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                       styles.roundedIconSearch,
                       {backgroundColor: themeColors.primary},
                     ]}>
-                    <SearchIcon color={'#fff'} width={25} />
+                    <CustomIcon
+                      color={'#fff'}
+                      size={25}
+                      name="plus"
+                      type="feather"
+                    />
                   </View>
                 </View>
               </View>
@@ -126,10 +94,10 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                   />
                 </View>
                 <Text style={[styles.cardTextServico, typography.semiBold]}>
-                  Agendar
+                  Relatórios
                 </Text>
                 <Text style={[styles.cardTextSmallServico, typography.light]}>
-                  Cortes e serviços
+                  Dados dos clientes
                 </Text>
               </TouchableOpacity>
 
@@ -154,36 +122,26 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               </TouchableOpacity>
             </View>
             <View style={[styles.row]}>
-              {loading ? (
-                <></>
-              ) : (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate(
-                      hasSubscription ? 'AssinaturaStatus' : 'AssinaturaScreen',
-                    )
-                  }
-                  style={[
-                    styles.cardServico,
-                    {backgroundColor: themeColors.secondary},
-                  ]}>
-                  <View style={styles.roundedIcon}>
-                    <IconPromotion
-                      width={40}
-                      height={40}
-                      color={themeColors.primary}
-                    />
-                  </View>
-                  <Text style={[styles.cardTextServico, typography.semiBold]}>
-                    {hasSubscription ? 'Ver Assinatura' : 'Assinatura'}
-                  </Text>
-                  <Text style={[styles.cardTextSmallServico, typography.light]}>
-                    {hasSubscription
-                      ? 'Gerir sua assinatura'
-                      : 'Criar assinatura'}
-                  </Text>
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity
+                onPress={() => navigation.navigate('SettingsScreen')}
+                style={[
+                  styles.cardServico,
+                  {backgroundColor: themeColors.secondary},
+                ]}>
+                <View style={styles.roundedIcon}>
+                  <IconConfig
+                    width={40}
+                    height={40}
+                    color={themeColors.primary}
+                  />
+                </View>
+                <Text style={[styles.cardTextServico, typography.semiBold]}>
+                  Fidelidade
+                </Text>
+                <Text style={[styles.cardTextSmallServico, typography.light]}>
+                  Programa de pontos
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => navigation.navigate('SettingsScreen')}
                 style={[

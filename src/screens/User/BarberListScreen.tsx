@@ -32,9 +32,9 @@ const BarberListScreen: React.FC<BarberListProps> = ({navigation}) => {
   const [searchText, setSearchText] = useState<string>('');
   const [filteredBarbers, setFilteredBarbers] = useState<Barber[]>([]);
   const [barbers, setBarbers] = useState<Barber[]>([]);
-
+  const user = useSelector((state: any) => state.user);
   const service = useSelector((state: any) => state.service);
-  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
   useEffect(() => {

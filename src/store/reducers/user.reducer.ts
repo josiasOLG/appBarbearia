@@ -23,12 +23,15 @@ const userSlice = createSlice({
     ) => {
       state.user.type = action.payload;
     },
+    updateProfile: (state, action: PayloadAction<Partial<User>>) => {
+      state.user = {...state.user, ...action.payload};
+    },
     logout: state => {
       state.user = initialState.user;
     },
   },
 });
 
-export const {setUser, setUserType, logout} = userSlice.actions;
+export const {setUser, setUserType, updateProfile, logout} = userSlice.actions;
 
 export default userSlice.reducer;

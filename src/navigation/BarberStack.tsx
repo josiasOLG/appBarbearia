@@ -14,6 +14,8 @@ import typography from '../styles/typographys/typography';
 import {StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import ServiceSelectionScreen from '../screens/base/ServiceSelectionScreen';
+import ServiceRegistrationScreen from '../screens/Barber/ServiceRegistrationScreen';
+import ProfileScreen from '../screens/base/ProfileScreen';
 const BarberStack = createStackNavigator();
 
 export const BarberStackNavigator = () => {
@@ -29,11 +31,6 @@ export const BarberStackNavigator = () => {
         options={{...noHeaderOption, ...hiddenBackButtonOption}}
       />
       <BarberStack.Screen
-        name="ServiceSelectionScreen"
-        options={{...noHeaderOption, ...hiddenBackButtonOption}}
-        component={ServiceSelectionScreen}
-      />
-      <BarberStack.Screen
         name="BarberDetails"
         component={HomeScreen}
         options={{...noHeaderOption, ...hiddenBackButtonOption}}
@@ -41,19 +38,47 @@ export const BarberStackNavigator = () => {
       <BarberStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
-        options={customHeaderOption(
-          themeColors.primary,
-          '#ffffff',
-          '',
-          true,
-          '#ffffff',
-        )}
+        options={{
+          headerTitle: 'Configurações',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
       />
       <BarberStack.Screen
         name="CadastrarEnderecoScreen"
         component={CadastrarEnderecoScreen}
         options={{
           headerTitle: 'Cadastrar endereço',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="ServiceRegistrationScreen"
+        component={ServiceRegistrationScreen}
+        options={{
+          headerTitle: 'Cadastrar serviços',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          headerTitle: 'Perfil',
           headerStyle: [
             styles.headerTransparent,
             {backgroundColor: themeColors.primary},

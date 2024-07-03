@@ -46,10 +46,16 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user);
   const service = useSelector((state: any) => state.service);
-  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
   const settingsData = [
-    {id: '2', title: 'Notificações', screen: 'Notifications', icon: 'bell'},
+    {id: '1', title: 'Notificações', screen: 'Notifications', icon: 'bell'},
+    {
+      id: '2',
+      title: 'Perfil',
+      screen: 'ProfileScreen',
+      icon: 'user',
+    },
     {id: '3', title: 'Segurança', screen: 'Security', icon: 'shield'},
     {
       id: '4',
@@ -77,9 +83,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
     <View style={[styles.container, {backgroundColor: themeColors.black}]}>
       <StatusBar backgroundColor={themeColors.primary} />
       <View style={[styles.topSection, {backgroundColor: themeColors.primary}]}>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
-          <IconBackBlack color={'#fff'} width={40} height={40} />
-        </TouchableOpacity> */}
         <View style={{alignItems: 'center'}}>
           <View style={styles.roudedImage}></View>
         </View>

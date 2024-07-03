@@ -45,13 +45,12 @@ const SubscriptionForm: React.FC = ({}) => {
     resolver: yupResolver(schema),
   });
 
+  const user = useSelector((state: any) => state.user);
   const service = useSelector((state: any) => state.service);
-  const userRole = service.selectedService?.toLowerCase() || 'user';
+  const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
   const navigation = useNavigation();
-
-  const user = useSelector((state: any) => state.user);
   const cardNumber = watch('cardNumber');
   const cardExpiry = watch('cardExpiry');
   const cardCVC = watch('cardCVC');

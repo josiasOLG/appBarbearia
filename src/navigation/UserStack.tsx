@@ -22,13 +22,15 @@ import ServiceSelectionScreen from '../screens/base/ServiceSelectionScreen';
 import BarberDetailsScreen from '../screens/User/BarberDetailsScreen';
 import ServiceBarberSelectionScreen from '../screens/User/ServiceSelectionScreen';
 import AppointmentSummaryScreen from '../screens/User/AppointmentSummaryScreen';
+import ProfileScreen from '../screens/base/ProfileScreen';
 
 const UserStack = createStackNavigator();
 
 export const UserStackNavigator = () => {
+  const user = useSelector((state: any) => state.user);
   const service = useSelector((state: any) => state.service);
-  const userRoleService = service.selectedService?.toLowerCase() || 'user';
-  const themeColorsService = colors[userRoleService] || colors.user;
+  const userRole = user.user.type?.toLowerCase() || 'user';
+  const themeColors = colors[userRole] || colors.user;
 
   return (
     <UserStack.Navigator>
@@ -60,7 +62,7 @@ export const UserStackNavigator = () => {
           headerTitle: 'Agendar',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColorsService.primary},
+            {backgroundColor: themeColors.primary},
           ],
           headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
           headerTintColor: '#fff',
@@ -73,7 +75,7 @@ export const UserStackNavigator = () => {
           headerTitle: 'Agendar',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColorsService.primary},
+            {backgroundColor: themeColors.primary},
           ],
           headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
           headerTintColor: '#fff',
@@ -86,7 +88,7 @@ export const UserStackNavigator = () => {
           headerTitle: 'Agendar',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColorsService.primary},
+            {backgroundColor: themeColors.primary},
           ],
           headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
           headerTintColor: '#fff',
@@ -100,7 +102,7 @@ export const UserStackNavigator = () => {
           headerTitle: 'Configurações',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColorsService.primary},
+            {backgroundColor: themeColors.primary},
           ],
           headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
           headerTintColor: '#fff',
@@ -113,7 +115,7 @@ export const UserStackNavigator = () => {
           headerTitle: 'Assinaturas',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColorsService.primary},
+            {backgroundColor: themeColors.primary},
           ],
           headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
           headerTintColor: '#fff',
@@ -156,7 +158,20 @@ export const UserStackNavigator = () => {
           headerTitle: 'Cadastrar endereço',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColorsService.primary},
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <UserStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          headerTitle: 'Perfil',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
           ],
           headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
           headerTintColor: '#fff',

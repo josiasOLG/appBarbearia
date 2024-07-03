@@ -91,14 +91,18 @@ const UserTab: React.FC<any> = () => {
           response.headers['access-token'],
         );
 
-        const {userId} = response.data;
+        const {userId, username, descricao, certificacoes, image} =
+          response.data;
 
         dispatch(
           setUser({
             id: userId,
-            username: user.displayName || '',
+            username: user.displayName || username,
+            descricao: descricao || '',
+            certificacoes: certificacoes || '',
+            image: image || '',
             isLoggedIn: true,
-            type: 'consumer',
+            type: 'BARBER',
           }),
         );
         setIsLoading(false);
