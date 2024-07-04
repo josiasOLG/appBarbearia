@@ -64,7 +64,8 @@ const Calendar: React.FC<CalendarProps> = ({
   const themeColors = colors[userRole] || colors.user;
 
   const handleDayPress = (day: any) => {
-    if (!blockedDates.includes(day.dateString)) {
+    const today = new Date().toISOString().split('T')[0];
+    if (day.dateString >= today && !blockedDates.includes(day.dateString)) {
       setSelectedDate(day.dateString);
       onDateSelect(day.dateString);
     }
@@ -136,6 +137,7 @@ const Calendar: React.FC<CalendarProps> = ({
         }}
         markingType={'custom'}
         markedDates={markedDates}
+        minDate={new Date().toISOString().split('T')[0]} // Definir a data mínima para hoje
       />
     </View>
   );

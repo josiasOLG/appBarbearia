@@ -44,7 +44,11 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
       />
       <Calendar onDateSelect={onDateSelect} blockedDates={blockedDates} />
       {selectedDate && (
-        <TimeSelector times={times} onTimeSelect={onTimeSelect} />
+        <TimeSelector
+          times={times}
+          onTimeSelect={onTimeSelect}
+          selectedDate={selectedDate}
+        />
       )}
     </View>
   );

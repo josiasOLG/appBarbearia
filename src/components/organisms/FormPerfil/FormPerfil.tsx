@@ -12,6 +12,16 @@ interface FormPerfilProps {
   setDescription: (text: string) => void;
   certifications: string;
   setCertifications: (text: string) => void;
+  startTime: string;
+  setStartTime: (text: string) => void;
+  lunchStartTime: string;
+  setLunchStartTime: (text: string) => void;
+  lunchEndTime: string;
+  setLunchEndTime: (text: string) => void;
+  endTime: string;
+  setEndTime: (text: string) => void;
+  interval: string;
+  setInterval: (text: string) => void;
 }
 
 const FormPerfil: React.FC<FormPerfilProps> = ({
@@ -23,6 +33,16 @@ const FormPerfil: React.FC<FormPerfilProps> = ({
   setDescription,
   certifications,
   setCertifications,
+  startTime,
+  setStartTime,
+  lunchStartTime,
+  setLunchStartTime,
+  lunchEndTime,
+  setLunchEndTime,
+  endTime,
+  setEndTime,
+  interval,
+  setInterval,
 }) => {
   return (
     <View>
@@ -44,6 +64,16 @@ const FormPerfil: React.FC<FormPerfilProps> = ({
         setDescription={setDescription}
         certifications={certifications}
         setCertifications={setCertifications}
+        startTime={startTime}
+        setStartTime={setStartTime}
+        lunchStartTime={lunchStartTime}
+        setLunchStartTime={setLunchStartTime}
+        lunchEndTime={lunchEndTime}
+        setLunchEndTime={setLunchEndTime}
+        endTime={endTime}
+        setEndTime={setEndTime}
+        interval={interval}
+        setInterval={setInterval}
       />
     </View>
   );

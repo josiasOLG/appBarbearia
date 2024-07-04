@@ -12,8 +12,14 @@ const deleteService = async (id: number) => {
   return ApiClient.delete(`/barber-services/${id}`);
 };
 
+const getAllServicePerfils = async (barberId: string) => {
+  console.log(barberId);
+  return ApiClient.get(`/barber-services/services/${barberId}`);
+};
+
 export const BarberService = {
   getServices,
   addService,
   deleteService,
+  getAllServicePerfils,
 };

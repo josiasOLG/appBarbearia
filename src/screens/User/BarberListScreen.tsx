@@ -48,7 +48,6 @@ const BarberListScreen: React.FC<BarberListProps> = ({navigation}) => {
         '',
         service.selectedService,
       );
-      console.log('response.data2 >>', response.data);
       if (response.data) {
         setBarbers(response.data);
         setFilteredBarbers(response.data);
@@ -78,9 +77,8 @@ const BarberListScreen: React.FC<BarberListProps> = ({navigation}) => {
     navigation.navigate('HomeScreen');
   };
 
-  const handleBarberPress = (id: string) => {
-    // Navegar para a tela de detalhes do barbeiro
-    navigation.navigate('BarberDetailsScreen', {barberId: id});
+  const handleBarberPress = (data: any) => {
+    navigation.navigate('BarberDetailsScreen', {barber: data});
   };
 
   return (

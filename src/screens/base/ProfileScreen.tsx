@@ -27,37 +27,33 @@ const ProfileScreen: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(
     user.user.profileImage || null,
   );
+
   const [name, setName] = useState(user.user.username || '');
   const [description, setDescription] = useState(user.user.descricao || '');
   const [certifications, setCertifications] = useState<string>(
     user.user.certificacoes || '',
   );
+  const [startTime, setStartTime] = useState(user.user.startTime || '');
+  const [lunchStartTime, setLunchStartTime] = useState(
+    user.user.lunchStartTime || '',
+  );
+  const [lunchEndTime, setLunchEndTime] = useState(
+    user.user.lunchEndTime || '',
+  );
+  const [endTime, setEndTime] = useState(user.user.endTime || '');
+  const [interval, setInterval] = useState(user.user.interval || '');
   const [loading, setLoading] = useState(false);
 
   const requestPermissions = async () => {
     if (Platform.OS === 'android') {
       let granted;
-
       if (Platform.Version >= 33) {
         granted = await request(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
-        if (granted !== RESULTS.GRANTED) {
-          console.log('READ_MEDIA_IMAGES permission denied');
-          return;
-        }
       } else {
-        // Below Android 13
         granted = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
-        if (granted !== RESULTS.GRANTED) {
-          console.log('READ_EXTERNAL_STORAGE permission denied');
-          return;
-        }
       }
-
       granted = await request(PERMISSIONS.ANDROID.CAMERA);
-      if (granted !== RESULTS.GRANTED) {
-        console.log('CAMERA permission denied');
-        return;
-      }
+
       pickImage();
     }
   };
@@ -84,6 +80,11 @@ const ProfileScreen: React.FC = () => {
         name: name,
         descricao: description,
         certificacoes: certifications,
+        startTime: startTime,
+        lunchStartTime: lunchStartTime,
+        lunchEndTime: lunchEndTime,
+        endTime: endTime,
+        interval: interval,
       };
 
       const response = await UserService.updateProfile(
@@ -112,10 +113,7 @@ const ProfileScreen: React.FC = () => {
     //     type: 'image/jpeg',
     //     name: 'profile.jpg',
     //   });
-    //   const response = await UserService.uploadProfileImage(
-    //     user.user.id,
-    //     formData,
-    //   );
+    //   const response = await UserService.uploadProfileImage(user.user.id, formData);
     //   if (response.data) {
     //     dispatch({type: 'UPDATE_USER_IMAGE', payload: response.data});
     //   }
@@ -142,6 +140,16 @@ const ProfileScreen: React.FC = () => {
             setDescription={setDescription}
             certifications={certifications}
             setCertifications={setCertifications}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            lunchStartTime={lunchStartTime}
+            setLunchStartTime={setLunchStartTime}
+            lunchEndTime={lunchEndTime}
+            setLunchEndTime={setLunchEndTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
+            interval={interval}
+            setInterval={setInterval}
           />
           <TouchableOpacity
             style={[
@@ -151,14 +159,14 @@ const ProfileScreen: React.FC = () => {
             onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>Salvar</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[
               styles.submitButton,
               {backgroundColor: themeColors.primary, marginTop: 10},
             ]}
             onPress={handleImageUpload}>
             <Text style={styles.submitButtonText}>Upload Imagem</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
       {loading && <LoadingModal />}

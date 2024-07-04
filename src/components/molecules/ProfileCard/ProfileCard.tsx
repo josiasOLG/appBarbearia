@@ -1,16 +1,24 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import typography from '../../../styles/typographys/typography';
+import {useSelector} from 'react-redux';
 
-const ProfileCard: React.FC = () => {
+interface PropsProfileCard {
+  barber?: any;
+}
+
+const ProfileCard: React.FC<PropsProfileCard> = ({barber}) => {
+  const user = useSelector((state: any) => state.user);
   return (
     <View style={styles.profileCard}>
       <Image
         source={require('../../../assets/images/back-perfil.jpg')}
         style={styles.barberImage}
       />
-      <Text style={[styles.barberName, typography.bold]}>Josias Oliveira</Text>
-      <Text style={styles.barberTitle}>Barbeiro Profissional</Text>
+      <Text style={[styles.barberName, typography.bold]}>
+        {user.user.username}
+      </Text>
+      <Text style={styles.barberTitle}>{barber.descricao}</Text>
       <View style={styles.statsRow}>
         <View style={styles.statItem}>
           <Text style={styles.statValue}>2000+</Text>
@@ -19,10 +27,6 @@ const ProfileCard: React.FC = () => {
         <View style={styles.statItem}>
           <Text style={styles.statValue}>5 Anos</Text>
           <Text style={styles.statLabel}>Experiência</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statValue}>10+</Text>
-          <Text style={styles.statLabel}>Prêmios</Text>
         </View>
       </View>
     </View>

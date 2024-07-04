@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -14,29 +14,45 @@ import colors from '../../styles/colors/Colors';
 import LinearGradient from 'react-native-linear-gradient';
 import typography from '../../styles/typographys/typography';
 import CustomIcon from '../../components/atoms/Icon/Icon';
+import {AppointmentService} from '../../api/AppointmentService';
+import {UserService} from '../../api/UserService';
+import {generateTimeSlots} from '../../utils/utils';
 
 const HEADER_HEIGHT = 150;
 
-const BarberDetailsScreen: React.FC = ({navigation}) => {
+const BarberDetailsScreen: React.FC = ({route, navigation}) => {
+  const {barber} = route.params;
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
+  const [times, setTimes] = useState<string[]>([]);
   const user = useSelector((state: any) => state.user);
-  const service = useSelector((state: any) => state.service);
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
-  const times = [
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-  ];
-
   const blockedDates = [];
+
+  useEffect(() => {
+    const fetchBarberHours = async () => {
+      try {
+        const response = await UserService.getUserDataHors(barber.id);
+
+        const {startTime, endTime, lunchStartTime, lunchEndTime, interval} =
+          response.data;
+        const timeSlots = generateTimeSlots(
+          startTime,
+          endTime,
+          interval,
+          lunchStartTime,
+          lunchEndTime,
+        );
+        setTimes(timeSlots);
+      } catch (error) {
+        console.error('Failed to fetch barber hours:', error);
+      }
+    };
+
+    fetchBarberHours();
+  }, [barber.id]);
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -48,26 +64,39 @@ const BarberDetailsScreen: React.FC = ({navigation}) => {
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
+    console.log(time);
   };
 
-  const handleContinue = () => {
-    navigation.navigate('ServiceBarberSelectionScreen', {
-      date: selectedDate,
-      time: selectedTime,
-    });
+  const handleContinue = async () => {
+    try {
+      const response = await AppointmentService.checkAppointment({
+        userId: user.user.id,
+        date: selectedDate,
+      });
+      if (response.exists) {
+        console.error('User already has an appointment on this date');
+      } else {
+        navigation.navigate('ServiceBarberSelectionScreen', {
+          date: selectedDate,
+          time: selectedTime,
+          barber: barber,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to check appointment:', error);
+    }
   };
 
   return (
     <LinearGradient colors={['#d2e2ef', '#f1f6fa']} style={styles.gradient}>
       <StatusBar backgroundColor={themeColors.primary} />
-      {/* <ProfileHeader onBackPress={handleBackPress} /> */}
       <ScrollView>
         <View style={[styles.contentContainer]}>
           <ProfileContent
-            name="Josias Oliveira"
+            name={barber.name}
             description="Barbeiro profissional"
             description2="Lorem ipsum solor sit amet color damie coloent tetur"
-            imageUrl={require('../../assets/images/screen.png')}
+            imageUrl={barber.imageUrl}
             onDateSelect={handleDateSelect}
             onTimeSelect={handleTimeSelect}
             selectedDate={selectedDate}

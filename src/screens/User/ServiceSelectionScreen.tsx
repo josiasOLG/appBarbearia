@@ -1,41 +1,44 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import colors from '../../styles/colors/Colors';
 import typography from '../../styles/typographys/typography';
 import CustomIcon from '../../components/atoms/Icon/Icon';
 import LinearGradient from 'react-native-linear-gradient';
-
-const services = [
-  {
-    title: 'Corte de cabelo',
-    description: 'Corte profissional de cabelo',
-    icon: 'scissors',
-  },
-  {title: 'Barba', description: 'Aparar e modelar a barba', icon: 'user'},
-  {title: 'Sobrancelha', description: 'Design de sobrancelhas', icon: 'eye'},
-  {title: 'Tintura', description: 'Tintura de cabelo', icon: 'droplet'},
-  {
-    title: 'Hidratação',
-    description: 'Tratamento de hidratação capilar',
-    icon: 'droplet',
-  },
-];
+import {BarberService} from '../../api/BarberService';
 
 const ServiceBarberSelectionScreen: React.FC = ({route, navigation}) => {
-  const {date, time} = route.params;
+  const {date, time, barber} = route.params;
 
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [services, setServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const user = useSelector((state: any) => state.user);
-  const service = useSelector((state: any) => state.service);
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await BarberService.getAllServicePerfils(barber.id);
+        setServices(response.data);
+      } catch (error) {
+        console.error('Failed to fetch services:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, [barber.id]);
 
   const handleServiceToggle = (service: string) => {
     setSelectedServices(prev =>
@@ -50,8 +53,17 @@ const ServiceBarberSelectionScreen: React.FC = ({route, navigation}) => {
       selectedServices,
       date,
       time,
+      barber,
     });
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={themeColors.primary} />
+      </View>
+    );
+  }
 
   return (
     <LinearGradient
@@ -64,11 +76,11 @@ const ServiceBarberSelectionScreen: React.FC = ({route, navigation}) => {
         </Text>
         {services.map(service => (
           <TouchableOpacity
-            key={service.title}
-            onPress={() => handleServiceToggle(service.title)}
+            key={service._id}
+            onPress={() => handleServiceToggle(service.name)}
             style={[
               styles.serviceButton,
-              selectedServices.includes(service.title) && {
+              selectedServices.includes(service.name) && {
                 backgroundColor: themeColors.primary,
               },
             ]}>
@@ -77,26 +89,26 @@ const ServiceBarberSelectionScreen: React.FC = ({route, navigation}) => {
                 <Text
                   style={[
                     styles.serviceTitle,
-                    selectedServices.includes(service.title) && {
+                    selectedServices.includes(service.name) && {
                       color: themeColors.white,
                     },
                   ]}>
-                  {service.title}
+                  {service.name}
                 </Text>
                 <Text
                   style={[
                     styles.serviceDescription,
-                    selectedServices.includes(service.title) && {
+                    selectedServices.includes(service.name) && {
                       color: themeColors.white,
                     },
                   ]}>
-                  {service.description}
+                  {service.description || 'Descrição não disponível'}
                 </Text>
               </View>
               <CustomIcon
-                name={service.icon}
+                name="scissors"
                 color={
-                  selectedServices.includes(service.title)
+                  selectedServices.includes(service.name)
                     ? themeColors.white
                     : themeColors.primary
                 }
@@ -117,7 +129,7 @@ const ServiceBarberSelectionScreen: React.FC = ({route, navigation}) => {
             <CustomIcon
               name="arrow-right"
               color={'#FFF'}
-              size={10}
+              size={20}
               type="feather"
               style={[styles.buttonTextRight, typography.extraLightItalic]}
             />
@@ -135,6 +147,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,

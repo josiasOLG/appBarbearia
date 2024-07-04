@@ -6,6 +6,7 @@ const colors = {
     accent: '#fc7115',
     black: '#333',
     white: '#fff',
+    verde: '#50C878',
   },
   barber: {
     primary: '#4CAF50',
@@ -14,6 +15,7 @@ const colors = {
     accent: '#000000',
     black: '#333',
     white: '#fff',
+    verde: '#50C878',
   },
   stylist: {
     primary: '#E91E63',
@@ -22,6 +24,7 @@ const colors = {
     accent: '#FFFFFF',
     black: '#333',
     white: '#fff',
+    verde: '#50C878',
   },
 };
 

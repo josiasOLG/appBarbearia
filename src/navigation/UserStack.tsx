@@ -23,6 +23,8 @@ import BarberDetailsScreen from '../screens/User/BarberDetailsScreen';
 import ServiceBarberSelectionScreen from '../screens/User/ServiceSelectionScreen';
 import AppointmentSummaryScreen from '../screens/User/AppointmentSummaryScreen';
 import ProfileScreen from '../screens/base/ProfileScreen';
+import StatusListScreen from '../screens/User/StatusListScreen';
+import AppointmentDetailsScreen from '../screens/User/AppointmentDetailsScreen';
 
 const UserStack = createStackNavigator();
 
@@ -94,7 +96,32 @@ export const UserStackNavigator = () => {
           headerTintColor: '#fff',
         }}
       />
-
+      <UserStack.Screen
+        name="StatusListScreen"
+        component={StatusListScreen}
+        options={{
+          headerTitle: 'Status',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <UserStack.Screen
+        name="AppointmentDetailsScreen"
+        component={AppointmentDetailsScreen}
+        options={{
+          headerTitle: 'Status',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
       <UserStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}

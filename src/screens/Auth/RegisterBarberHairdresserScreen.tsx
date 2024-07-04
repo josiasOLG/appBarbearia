@@ -116,7 +116,7 @@ const RegisterBarberHairdresserScreen: React.FC = () => {
             styles.roleButton,
             role === 'STYLIST' && styles.roleButtonActive,
           ]}
-          onPress={() => handleRoleChange('BARBER')}>
+          onPress={() => handleRoleChange('STYLIST')}>
           <Text style={styles.roleButtonText}>Cabeleireiro(a)</Text>
         </TouchableOpacity>
       </View>

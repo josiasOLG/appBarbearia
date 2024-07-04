@@ -1,41 +1,69 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
 import colors from '../../../styles/colors/Colors';
+import {
+  getCurrentTime,
+  handleTimePress,
+  isTimeDisabled,
+} from '../../../utils/utils';
+import moment from 'moment';
 
 interface TimeSelectorProps {
   times: string[];
+  selectedDate: string;
   onTimeSelect: (time: string) => void;
 }
 
-const TimeSelector: React.FC<TimeSelectorProps> = ({times, onTimeSelect}) => {
+const TimeSelector: React.FC<TimeSelectorProps> = ({
+  times,
+  onTimeSelect,
+  selectedDate,
+}) => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState<string>('');
   const user = useSelector((state: any) => state.user);
-  const service = useSelector((state: any) => state.service);
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
-  const handleTimePress = (time: string) => {
+  useFocusEffect(
+    React.useCallback(() => {
+      setCurrentTime(getCurrentTime());
+    }, []),
+  );
+
+  const handleTimePressInternal = (time: string) => {
     setSelectedTime(time);
     onTimeSelect(time);
   };
 
   return (
     <View style={styles.container}>
-      {times.map(time => (
-        <TouchableOpacity
-          key={time}
-          onPress={() => handleTimePress(time)}
-          style={[
-            styles.timeButton,
-            selectedTime === time && {backgroundColor: themeColors.primary},
-          ]}>
-          <Text
-            style={[styles.timeText, selectedTime === time && {color: '#fff'}]}>
-            {time}
-          </Text>
-        </TouchableOpacity>
-      ))}
+      {times.map(time => {
+        const isDisabled = isTimeDisabled(currentTime, time, selectedDate);
+
+        return (
+          <TouchableOpacity
+            key={time}
+            onPress={() => handleTimePressInternal(time)}
+            style={[
+              styles.timeButton,
+              selectedTime === time && {backgroundColor: themeColors.primary},
+              isDisabled && styles.disabledButton,
+            ]}
+            disabled={isDisabled}>
+            <Text
+              style={[
+                styles.timeText,
+                selectedTime === time && {color: '#fff'},
+                isDisabled && styles.disabledText,
+              ]}>
+              {time}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
@@ -63,6 +91,13 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 16,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+    borderColor: '#aaa',
+  },
+  disabledText: {
+    color: '#666',
   },
 });
 

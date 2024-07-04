@@ -31,6 +31,10 @@ const updateProfile = async (userId: string, data: any) => {
   return ApiClient.put(`/users/${userId}`, data);
 };
 
+const getUserDataHors = async (barberId: string) => {
+  return ApiClient.get(`/users/${barberId}/hours`);
+};
+
 export const UserService = {
   validateCode,
   resetPassword,
@@ -38,4 +42,5 @@ export const UserService = {
   updateUserService,
   searchUsers,
   updateProfile,
+  getUserDataHors,
 };

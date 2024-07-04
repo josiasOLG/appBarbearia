@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ViewStyle} from 'react-native';
 import CustomIcon from '../../atoms/Icon/Icon';
 import colors from '../../../styles/colors/Colors';
 import typography from '../../../styles/typographys/typography';
@@ -8,11 +8,18 @@ interface InfoCardProps {
   icon: string;
   label: string;
   value: string;
+  width?: number | string; // Adiciona uma nova prop width
 }
 
-const InfoCard: React.FC<InfoCardProps> = ({icon, label, value}) => {
+const InfoCard: React.FC<InfoCardProps> = ({icon, label, value, width}) => {
+  const cardStyle: ViewStyle = {
+    ...styles.infoCard,
+    flex: width ? 0 : 1, // Flex grow only if width is not provided
+    width: width || 'auto',
+  };
+
   return (
-    <View style={styles.infoCard}>
+    <View style={cardStyle}>
       <View style={styles.cardRow}>
         <CustomIcon
           name={icon}

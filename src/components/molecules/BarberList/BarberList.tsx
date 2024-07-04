@@ -9,7 +9,7 @@ interface Barber {
 
 interface BarberListProps {
   barbers: Barber[];
-  onBarberPress: (id: string) => void;
+  onBarberPress: (data: any) => void;
 }
 
 const BarberList: React.FC<BarberListProps> = ({barbers, onBarberPress}) => {
@@ -21,7 +21,7 @@ const BarberList: React.FC<BarberListProps> = ({barbers, onBarberPress}) => {
             key={barber.id}
             id={barber.id}
             name={barber.name}
-            onPress={() => onBarberPress(barber.id)}
+            onPress={() => onBarberPress(barber)}
           />
         ))}
     </View>

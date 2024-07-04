@@ -153,7 +153,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                 style={[
                   styles.cardServico,
                   {backgroundColor: themeColors.secondary},
-                ]}>
+                ]}
+                onPress={() => navigation.navigate('StatusListScreen')}>
                 <View
                   style={[
                     styles.roundedIcon,
