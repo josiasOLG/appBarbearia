@@ -1,35 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, ActivityIndicator, Modal} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import Toast from 'react-native-toast-message';
 
 interface LoadingScreenProps {
   visible: boolean;
-  onSuccess: () => void;
-  onError: (errorMessage: string) => void;
-  successScreen: string;
-  errorScreen: string;
+  message: string;
+  onSuccess?: () => void;
+  onError?: (errorMessage: string) => void;
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
   visible,
+  message,
   onSuccess,
   onError,
-  successScreen,
-  errorScreen,
 }) => {
-  const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     if (visible) {
       // Simula uma operação assíncrona
       setTimeout(() => {
-        setIsLoading(false);
         if (Math.random() < 0.5) {
-          onSuccess();
+          onSuccess && onSuccess();
         } else {
-          onError('Ocorreu um erro. Por favor, tente novamente.');
+          onError && onError('Ocorreu um erro. Por favor, tente novamente.');
         }
       }, 2000);
     }
@@ -40,7 +32,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
       <View style={styles.container}>
         <View style={styles.content}>
           <View style={styles.topSection}>
-            <Text style={styles.loadingText}>Carregando...</Text>
+            <Text style={styles.loadingText}>{message || 'Carregando...'}</Text>
           </View>
           <View style={styles.middleSection}>
             <ActivityIndicator size="large" color="#624ED1" />

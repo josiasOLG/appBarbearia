@@ -20,16 +20,29 @@ const AppointmentDetailsScreen: React.FC = ({route}) => {
   const themeColors = colors[userRole] || colors.user;
 
   const isPending = appointment.status === 'pending';
-  const isApproved = appointment.statusAprovacao === 'approved';
+  const isApproved = appointment.statusAprovacao === 'aprovado';
+  const isRejected = appointment.statusAprovacao === 'rejeitado';
 
   const completionTitle = isApproved
     ? 'Agendamento Aprovado'
+    : isRejected
+    ? 'Agendamento Rejeitado'
     : 'Agendamento Pendente';
+
   const completionDescription = isApproved
     ? 'Seu agendamento foi aprovado. Por favor, verifique os detalhes abaixo.'
+    : isRejected
+    ? 'Seu agendamento foi rejeitado. Por favor, verifique os detalhes abaixo.'
     : 'Seu agendamento está pendente de aprovação. Notificaremos você assim que for aprovado.';
 
-  const formattedDate = moment(appointment.date).format('MMMM [de] YYYY');
+  const formattedDate = moment(appointment.date).format(
+    'DD [de] MMMM [de] YYYY',
+  );
+  const isPastAppointment = moment().isAfter(moment(appointment.date));
+
+  const pastAppointmentTitle = 'Agendamento Passado';
+  const pastAppointmentDescription =
+    'Este agendamento já passou. Por favor, reagende se necessário.';
 
   return (
     <LinearGradient colors={['#f1f6fa', '#d2e2ef']} style={styles.gradient}>
@@ -57,18 +70,41 @@ const AppointmentDetailsScreen: React.FC = ({route}) => {
           </View>
         </View>
 
-        <View style={styles.completion}>
-          <View style={styles.completionContainer}>
+        <View
+          style={[
+            styles.completion,
+            isApproved && {backgroundColor: themeColors.verde},
+            isRejected && {backgroundColor: themeColors.vermelho},
+          ]}>
+          <View
+            style={[
+              styles.completionContainer,
+              isPastAppointment && styles.pastAppointmentContainer,
+              (isApproved || isRejected) && styles.approvedContainer,
+            ]}>
             <Text
               style={[
                 styles.completionTitle,
                 typography.bold,
-                {color: themeColors.primary},
+                {
+                  color: isPastAppointment
+                    ? '#ff0000'
+                    : isApproved || isRejected
+                    ? '#fff'
+                    : themeColors.primary,
+                },
               ]}>
-              {completionTitle}
+              {isPastAppointment ? pastAppointmentTitle : completionTitle}
             </Text>
-            <Text style={[styles.completionDescription, typography.regular]}>
-              {completionDescription}
+            <Text
+              style={[
+                styles.completionDescription,
+                typography.regular,
+                (isApproved || isRejected) && styles.approvedText,
+              ]}>
+              {isPastAppointment
+                ? pastAppointmentDescription
+                : completionDescription}
             </Text>
           </View>
         </View>
@@ -86,7 +122,18 @@ const AppointmentDetailsScreen: React.FC = ({route}) => {
           {isApproved && (
             <TimelineItem
               title="Agendamento Aprovado"
-              description="Seu agendamento foi aprovado. Por favor, verifique os detalhes."
+              description="Seu agendamento foi aprovado. Por favor, verifique os detalhes no topo da tela. O barbeiro agradece seu contato e está no aguardo da sua visita."
+              isCompleted={true}
+            />
+          )}
+          {isRejected && (
+            <TimelineItem
+              title="Agendamento Rejeitado"
+              description={
+                appointment.statusMensage
+                  ? appointment.statusMensage
+                  : 'Necessário realizar um reagendamento. O barbeiro não se encontra disponivel'
+              }
               isCompleted={true}
             />
           )}
@@ -130,6 +177,7 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     color: '#fff',
+    textTransform: 'capitalize',
   },
   profileTime: {
     fontSize: 14,
@@ -145,6 +193,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
   },
+  pastAppointmentContainer: {
+    borderColor: '#ff0000',
+    borderWidth: 1,
+  },
+  approvedContainer: {
+    backgroundColor: 'transparent',
+  },
   completionTitle: {
     fontSize: 16,
   },
@@ -152,6 +207,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginTop: 10,
+  },
+  approvedText: {
+    color: '#fff',
   },
   timelineContainer: {
     marginVertical: 20,

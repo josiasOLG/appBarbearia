@@ -126,7 +126,7 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <LinearGradient
-      colors={[themeColors.secondary, themeColors.secondary]}
+      colors={[themeColors.white, themeColors.white]}
       style={styles.gradient}>
       <StatusBar backgroundColor={themeColors.primary} />
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>

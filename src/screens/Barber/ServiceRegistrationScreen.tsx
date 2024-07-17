@@ -23,6 +23,7 @@ const ServiceRegistrationScreen: React.FC = () => {
   const themeColors = colors[userRole] || colors.user;
 
   const [serviceName, setServiceName] = useState('');
+  const [points, setPoints] = useState('');
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -44,12 +45,17 @@ const ServiceRegistrationScreen: React.FC = () => {
   };
 
   const handleAddService = async () => {
-    if (serviceName.trim()) {
+    if (serviceName.trim() && points.trim()) {
       setLoading(true);
       try {
         const userId = user.user.id;
-        await BarberService.addService(userId, serviceName.trim());
+        await BarberService.addService(
+          userId,
+          serviceName.trim(),
+          points.trim(),
+        );
         setServiceName('');
+        setPoints('');
         fetchServices();
       } catch (error) {
         console.error('Failed to add service', error);
@@ -92,6 +98,14 @@ const ServiceRegistrationScreen: React.FC = () => {
               value={serviceName}
               onChangeText={setServiceName}
             />
+            <TextInput
+              style={styles.input}
+              placeholder="Pontos"
+              placeholderTextColor="#aaa"
+              value={points}
+              onChangeText={setPoints}
+              keyboardType="numeric"
+            />
             <TouchableOpacity
               style={[styles.addButton, {backgroundColor: themeColors.primary}]}
               onPress={handleAddService}>
@@ -117,7 +131,7 @@ const ServiceRegistrationScreen: React.FC = () => {
                     {backgroundColor: themeColors.primary},
                   ]}>
                   <Text style={[styles.serviceText, typography.regular]}>
-                    {service.name}
+                    {service.name} - {service.points} pontos
                   </Text>
                   <TouchableOpacity
                     style={[styles.btnDelete]}
@@ -211,6 +225,7 @@ const styles = StyleSheet.create({
   serviceText: {
     fontSize: 16,
     color: '#fff',
+    textTransform: 'capitalize',
   },
   emptyContainer: {
     alignItems: 'center',

@@ -12,14 +12,14 @@ import IconButton from '../Icon/IconButton';
 import CustomIcon from '../Icon/Icon';
 
 interface CustomModalProps {
-  visible: boolean;
-  title: string;
-  message: any;
+  visible?: boolean;
+  title?: string;
+  message?: any;
   showInput?: boolean;
   inputType?: 'email' | 'password' | 'text';
   inputValue?: string;
   onChangeInput?: (value: string) => void;
-  onClose: () => void;
+  onClose?: () => void;
   onSubmit?: () => void;
 }
 

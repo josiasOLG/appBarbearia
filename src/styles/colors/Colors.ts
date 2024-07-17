@@ -7,6 +7,9 @@ const colors = {
     black: '#333',
     white: '#fff',
     verde: '#50C878',
+    vermelho: '#E91E13',
+    gold: '#FFD700',
+    goldenrod: '#DAA520',
   },
   barber: {
     primary: '#4CAF50',
@@ -16,6 +19,9 @@ const colors = {
     black: '#333',
     white: '#fff',
     verde: '#50C878',
+    vermelho: '#E91E13',
+    gold: '#FFD700',
+    goldenrod: '#DAA520',
   },
   stylist: {
     primary: '#E91E63',
@@ -25,6 +31,9 @@ const colors = {
     black: '#333',
     white: '#fff',
     verde: '#50C878',
+    vermelho: '#E91E13',
+    gold: '#FFD700',
+    goldenrod: '#DAA520',
   },
 };
 

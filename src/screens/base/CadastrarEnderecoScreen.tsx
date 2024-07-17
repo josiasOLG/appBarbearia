@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import EnderecoForm from '../../components/organisms/EnderecoForm/EnderecoForm';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,7 +20,11 @@ const CadastrarEnderecoScreen: React.FC = () => {
   return (
     <LinearGradient
       style={styles.container}
-      colors={[themeColors.secondary, themeColors.secondary]}>
+      colors={[themeColors.white, themeColors.white]}>
+      <StatusBar
+        backgroundColor={themeColors.primary}
+        barStyle="light-content"
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>

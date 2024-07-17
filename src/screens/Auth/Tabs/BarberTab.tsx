@@ -25,14 +25,17 @@ import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {AuthService} from '../../../api/AuthService';
 import {setUser} from '../../../store/reducers/user.reducer';
+import {
+  showLoading,
+  hideLoading,
+} from '../../../store/reducers/loading.reducer';
 import {useNavigation} from '@react-navigation/native';
 import * as Keychain from 'react-native-keychain';
-import LoadingScreen from '../../base/LoadingScreen';
+import Toast from 'react-native-toast-message';
 import CustomModal from '../../../components/atoms/CustomModal/CustomModal';
 
 const BarberTab: React.FC<any> = () => {
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState<{
     title: string;
@@ -52,10 +55,10 @@ const BarberTab: React.FC<any> = () => {
 
   useEffect(() => {
     GoogleSignin.configure({
-      scopes: ['email'], // Escopos de acesso solicitados
+      scopes: ['email'],
       webClientId:
         '829092500903-rcgs6t75s6tc8acv715gf38d86092ns5.apps.googleusercontent.com',
-      offlineAccess: true, // Permite o acesso offline
+      offlineAccess: true,
     });
   }, []);
 
@@ -69,7 +72,7 @@ const BarberTab: React.FC<any> = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await setIsLoading(true);
+      dispatch(showLoading('Carregando...'));
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       const {idToken} = await GoogleSignin.getTokens();
@@ -91,12 +94,13 @@ const BarberTab: React.FC<any> = () => {
           response.headers['access-token'],
         );
 
-        const {userId, descricao, certificacoes, username, image} =
+        const {userId, username, descricao, certificacoes, image, email} =
           response.data;
-        console.log(response.data);
+
         dispatch(
           setUser({
             id: userId,
+            email: email,
             username: user.displayName || username,
             descricao: descricao || '',
             certificacoes: certificacoes || '',
@@ -105,26 +109,25 @@ const BarberTab: React.FC<any> = () => {
             type: 'BARBER',
           }),
         );
-        setIsLoading(false);
+        dispatch(hideLoading());
         navigation.navigate('HomeScreen');
       }
     } catch (error: any) {
-      setIsLoading(false);
+      dispatch(hideLoading());
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // Usuário cancelou o login
       } else {
-        console.log(error);
-        setModalMessage({
-          title: 'Erro no login com Google',
-          mensagem: 'Enviando email de recuperação de senha.',
+        Toast.show({
+          type: 'error',
+          text1: 'Erro no login com Google',
+          text2: 'Enviando email de recuperação de senha.',
         });
-        setShowModal(true);
       }
     }
   };
 
   const handleModalSubmit = async () => {
-    setIsLoading(true);
+    dispatch(showLoading('Enviando...'));
     try {
       await AuthService.recoverPassword(modalInput);
       setModalMessage({
@@ -132,13 +135,13 @@ const BarberTab: React.FC<any> = () => {
         mensagem: 'Email de recuperação de senha enviado com sucesso.',
       });
       navigation.navigate('ValidarCodigoSMS', {email: modalInput});
-      setIsLoading(false);
+      dispatch(hideLoading());
     } catch (error) {
       setModalMessage({
         title: 'Erro ao enviar email',
         mensagem: 'Erro ao enviar email de recuperação de senha.',
       });
-      setIsLoading(false);
+      dispatch(hideLoading());
     }
   };
 
@@ -147,11 +150,18 @@ const BarberTab: React.FC<any> = () => {
   };
 
   const handleLogin = async (data?: any) => {
-    setIsLoading(true);
+    dispatch(showLoading('Carregando...'));
     try {
       const response = await AuthService.login(data);
-      const {user_id, display_name, role, descricao, certificacoes, image} =
-        response.data;
+      const {
+        user_id,
+        display_name,
+        role,
+        descricao,
+        certificacoes,
+        image,
+        email,
+      } = response.data;
 
       await Keychain.setGenericPassword(
         'accessToken',
@@ -168,6 +178,7 @@ const BarberTab: React.FC<any> = () => {
       dispatch(
         setUser({
           id: user_id,
+          email: email,
           username: display_name || '',
           isLoggedIn: true,
           type: role,
@@ -178,18 +189,15 @@ const BarberTab: React.FC<any> = () => {
       );
 
       navigation.navigate('BarberHomeScreen');
+      dispatch(hideLoading());
     } catch (error) {
-      console.log('error >>', error);
-      setIsLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao fazer login',
+        text2: 'Por favor, verifique suas credenciais.',
+      });
+      dispatch(hideLoading());
     }
-  };
-
-  const handleLoginSuccess = () => {
-    // Lógica adicional após o sucesso do login, se necessário
-  };
-
-  const handleLoginError = (errorMessage: string) => {
-    // Lógica adicional para lidar com erros de login, se necessário
   };
 
   return (
@@ -274,13 +282,6 @@ const BarberTab: React.FC<any> = () => {
             <Text style={styles.socialButtonText}>Facebook</Text>
           </TouchableOpacity>
         </View>
-        <LoadingScreen
-          visible={isLoading}
-          onSuccess={handleLoginSuccess}
-          onError={handleLoginError}
-          successScreen="HomeScreen"
-          errorScreen="LoginScreen"
-        />
         <CustomModal
           visible={showModal}
           message={modalMessage}

@@ -8,8 +8,10 @@ interface StatusCardProps {
   date: string;
   time: string;
   status: string;
+  statusAprovacao: string;
   userIcons: string[];
   themeColors: any;
+  isPastAppointment: boolean; // New prop for past appointment check
 }
 
 const formatDateTime = (date: string, time: string): string => {
@@ -23,21 +25,39 @@ const StatusCard: React.FC<StatusCardProps> = ({
   date,
   time,
   status,
+  statusAprovacao,
   userIcons,
   themeColors,
+  isPastAppointment,
 }) => {
-  const isPending = status === 'pending';
-  const cardColor = isPending ? themeColors?.primary : themeColors?.verde;
+  let cardColor = themeColors.primary; // Default to primary color
+
+  if (isPastAppointment) {
+    cardColor = '#ff0000'; // Red for past appointments
+  } else if (statusAprovacao === 'rejeitado') {
+    cardColor = '#ff0000'; // Red for rejected
+  } else if (statusAprovacao === 'aprovado') {
+    cardColor = themeColors.verde; // Green for approved
+  } else if (status === 'pending') {
+    cardColor = themeColors.primary; // Primary color for pending
+  }
 
   return (
     <LinearGradient
       colors={[themeColors?.white, themeColors?.white]}
       style={styles.gradient}>
-      <View style={[styles.card]}>
+      <View
+        style={[styles.card, isPastAppointment && styles.pastAppointmentCard]}>
         <View style={styles.header}>
           <View style={[styles.dot, {backgroundColor: cardColor}]} />
           <Text style={[styles.status, typography.bold, {color: cardColor}]}>
-            {isPending ? 'Pendente' : 'Aprovado'}
+            {isPastAppointment
+              ? 'Passado'
+              : statusAprovacao === 'rejeitado'
+              ? 'Rejeitado'
+              : statusAprovacao === 'aprovado'
+              ? 'Aprovado'
+              : 'Pendente'}
           </Text>
         </View>
         <View style={styles.infoContainer}>
@@ -63,10 +83,14 @@ const styles = StyleSheet.create({
   card: {
     paddingHorizontal: 15,
     paddingVertical: 15,
-    marginBottom: 15,
+    marginBottom: 0,
     borderWidth: 0,
     borderRadius: 10,
     backgroundColor: '#fff',
+  },
+  pastAppointmentCard: {
+    borderColor: '#ff0000',
+    borderWidth: 1,
   },
   header: {
     flexDirection: 'row',

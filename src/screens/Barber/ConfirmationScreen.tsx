@@ -1,18 +1,15 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  StatusBar,
-  ScrollView,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, StatusBar, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import colors from '../../styles/colors/Colors';
 import typography from '../../styles/typographys/typography';
 import LinearGradient from 'react-native-linear-gradient';
-import {GlobalLayoutStyles} from '../../styles/GlobalLayoutStyles';
-import CustomIcon from '../../components/atoms/Icon/Icon';
+import ServiceList from '../../components/organisms/ServiceList/ServiceList';
+import FilterStatus from '../../components/molecules/FilterStatus/FilterStatus';
+import {AppointmentService} from '../../api/AppointmentService';
+import ModalStatus from '../../components/organisms/ModalStatus/ModalStatus';
+import ModalAddPoints from '../../components/organisms/ModalAddPoints/ModalAddPoints';
+import {useFocusEffect} from '@react-navigation/native';
 
 interface ConfirmationScreenProps {
   navigation: any;
@@ -25,88 +22,163 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
   const userRole = user?.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
-  const [services, setServices] = useState([
-    {
-      id: 1,
-      clientName: 'João Silva',
-      service: 'Corte de cabelo',
-      date: '2024-07-01',
-      confirmed: false,
-    },
-    {
-      id: 2,
-      clientName: 'Maria Oliveira',
-      service: 'Tintura de cabelo',
-      date: '2024-07-01',
-      confirmed: false,
-    },
-    {
-      id: 3,
-      clientName: 'Pedro Sousa',
-      service: 'Corte de cabelo',
-      date: '2024-07-01',
-      confirmed: false,
-    },
-  ]);
+  const [services, setServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalAddPointsVisible, setModalAddPointsVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalDescription, setModalDescription] = useState('');
+  const [showInput, setShowInput] = useState(true);
+  const [confirmAction, setConfirmAction] = useState<() => void>(() => {});
+  const [cancelReason, setCancelReason] = useState('');
+  const [selectedServiceId, setSelectedServiceId] = useState<
+    number | string | null
+  >(null);
+  const [selectedUserId, setSelectedUserId] = useState<any>(null);
+  const [currentFilter, setCurrentFilter] = useState<string | undefined>(
+    undefined,
+  );
 
-  const confirmService = (serviceId: number) => {
-    setServices(
-      services.map(service =>
-        service.id === serviceId ? {...service, confirmed: true} : service,
-      ),
+  const fetchAppointments = async (filter?: string) => {
+    setLoading(true);
+    try {
+      const response = await AppointmentService.getAllAppointamentBarberId(
+        user.user.id,
+        filter,
+      );
+      setServices(response);
+    } catch (error) {
+      console.error('Failed to fetch appointments:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAppointments(currentFilter);
+    }, [user.user.id, currentFilter]),
+  );
+
+  const confirmService = async (serviceId: number | string) => {
+    try {
+      await AppointmentService.approveAppointment(serviceId);
+      fetchAppointments(currentFilter); // Fetch appointments after confirming
+    } catch (error) {
+      console.error('Failed to confirm appointment:', error);
+    }
+  };
+
+  const cancelService = (serviceId: number | string) => {
+    setSelectedServiceId(serviceId);
+    setModalTitle('Motivo do Cancelamento');
+    setModalDescription(
+      'Por favor, forneça uma breve explicação para o cancelamento do agendamento. Sua opinião é importante para melhorarmos nossos serviços.',
     );
+    setShowInput(true);
+    setConfirmAction(() => handleCancelService);
+    setModalVisible(true);
+  };
+
+  const addPoints = (serviceId: number | string, userId: any) => {
+    setSelectedServiceId(serviceId);
+    setSelectedUserId(userId);
+    setModalTitle('Adicionar Pontos');
+    setModalDescription(
+      'Deseja realmente adicionar pontos para este usuário? (!IMPORTANTE: Ao adicionar os pontos não é possível remover os pontos)',
+    );
+    setModalAddPointsVisible(true);
+  };
+
+  const handleCancelService = async () => {
+    if (selectedServiceId) {
+      try {
+        await AppointmentService.rejectAppointment(
+          selectedServiceId,
+          cancelReason,
+        );
+        fetchAppointments(currentFilter); // Fetch appointments after canceling
+      } catch (error) {
+        console.error('Failed to cancel appointment:', error);
+      } finally {
+        setModalVisible(false);
+        setCancelReason('');
+        setSelectedServiceId(null);
+      }
+    }
+  };
+
+  const handleAddPoints = async () => {
+    if (selectedServiceId && selectedUserId) {
+      try {
+        await AppointmentService.addPoints(
+          selectedServiceId,
+          selectedUserId,
+          user.user.id,
+          user.user.username,
+        );
+        fetchAppointments(currentFilter);
+      } catch (error) {
+        console.error('Failed to add points:', error);
+      } finally {
+        setModalAddPointsVisible(false);
+        setSelectedServiceId(null);
+        setSelectedUserId(null); // Ensure to reset the selectedUserId
+      }
+    }
+  };
+
+  const handleFilterChange = (filter: string) => {
+    setCurrentFilter(filter);
+    fetchAppointments(filter);
   };
 
   return (
     <LinearGradient
-      colors={[themeColors.primary, themeColors.primary]}
+      colors={[themeColors.primary, themeColors.black]}
       style={styles.gradient}>
       <StatusBar backgroundColor={themeColors.primary} />
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.container}>
-          <Text style={[styles.title, typography.semiBold]}>
-            Confirmação de Agendamentos
+          <Text style={[styles.title, typography.bold]}>Seus Agendamentos</Text>
+          <Text style={[styles.subtitle, typography.regular]}>
+            Aqui você pode ver e confirmar os seus agendamentos. Clique em um
+            agendamento para ver mais detalhes.
           </Text>
-
-          <View style={styles.section}>
-            {services.map(service => (
-              <View key={service.id} style={styles.service}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('ClientDetailsScreen', {
-                      clientName: service.clientName,
-                    })
-                  }>
-                  <Text style={styles.serviceText}>
-                    {service.clientName} - {service.service} - {service.date}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.confirmButton,
-                    {
-                      backgroundColor: service.confirmed
-                        ? 'grey'
-                        : themeColors.primary,
-                    },
-                  ]}
-                  onPress={() => confirmService(service.id)}
-                  disabled={service.confirmed}>
-                  <CustomIcon
-                    name="check"
-                    size={20}
-                    color="#fff"
-                    type="feather"
-                  />
-                  <Text style={styles.confirmButtonText}>
-                    {service.confirmed ? 'Confirmado' : 'Confirmar'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
+          <FilterStatus
+            onFilterChange={handleFilterChange}
+            themeColors={themeColors}
+          />
+          {loading ? (
+            <Text style={styles.loadingText}>Carregando...</Text>
+          ) : (
+            <ServiceList
+              services={services}
+              confirmService={confirmService}
+              cancelService={cancelService}
+              addPoints={addPoints}
+              themeColors={themeColors}
+            />
+          )}
         </View>
       </ScrollView>
+      <ModalStatus
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onConfirm={confirmAction}
+        themeColors={themeColors}
+        title={modalTitle}
+        description={modalDescription}
+        showInput={showInput}
+      />
+      <ModalAddPoints
+        visible={modalAddPointsVisible}
+        onClose={() => setModalAddPointsVisible(false)}
+        onConfirm={handleAddPoints}
+        themeColors={themeColors}
+        title={modalTitle}
+        description={modalDescription}
+      />
     </LinearGradient>
   );
 };
@@ -125,34 +197,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     color: '#fff',
-    marginBottom: 20,
-  },
-  section: {
-    marginBottom: 20,
-  },
-  service: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
     marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    textAlign: 'center',
   },
-  serviceText: {
+  subtitle: {
     fontSize: 16,
-    color: '#333',
-  },
-  confirmButton: {
-    borderRadius: 10,
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  confirmButtonText: {
     color: '#fff',
-    fontSize: 14,
-    marginLeft: 5,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  loadingText: {
+    fontSize: 18,
+    color: '#fff',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 

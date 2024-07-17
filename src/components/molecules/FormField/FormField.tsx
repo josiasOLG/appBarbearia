@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Controller, Control} from 'react-hook-form';
 import {TextInputMask, TextInputMaskProps} from 'react-native-masked-text';
+import {BlurView} from '@react-native-community/blur';
 import Label from '../../atoms/Label/Label';
 import InputField from '../../atoms/InputField/InputField';
 import typography from '../../../styles/typographys/typography';
@@ -68,42 +69,49 @@ const FormField: React.FC<FormFieldProps> = ({
   };
 
   return (
-    <View style={containerStyle}>
+    <View style={[styles.wrapper, containerStyle]}>
       {label && (
         <Text style={[styles.label, labelCustomStyle, typography.bold]}>
           {label}
         </Text>
       )}
-      <Controller
-        control={control}
-        name={name}
-        render={({field: {onChange, onBlur, value}}) =>
-          maskType ? (
-            <TextInputMask
-              type={maskType}
-              options={options}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              customTextInput={InputField}
-              customTextInputProps={{
-                error: error,
-                ...props,
-                style: [styles.input, inputCustomStyle, inputStyle],
-              }}
-            />
-          ) : (
-            <InputField
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              error={error}
-              style={[styles.input, inputCustomStyle, inputStyle]}
-              {...props}
-            />
-          )
-        }
-      />
+      <View style={styles.inputContainer}>
+        <BlurView
+          style={styles.absoluteBlur}
+          blurType="light"
+          blurAmount={10}
+        />
+        <Controller
+          control={control}
+          name={name}
+          render={({field: {onChange, onBlur, value}}) =>
+            maskType ? (
+              <TextInputMask
+                type={maskType}
+                options={options}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                customTextInput={InputField}
+                customTextInputProps={{
+                  error: error,
+                  ...props,
+                  style: [styles.input, inputCustomStyle, inputStyle],
+                }}
+              />
+            ) : (
+              <InputField
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                error={error}
+                style={[styles.input, inputCustomStyle, inputStyle]}
+                {...props}
+              />
+            )
+          }
+        />
+      </View>
     </View>
   );
 };
@@ -111,17 +119,32 @@ const FormField: React.FC<FormFieldProps> = ({
 export default FormField;
 
 const styles = StyleSheet.create({
+  wrapper: {
+    marginBottom: 20,
+  },
   label: {
-    fontSize: 16,
+    fontSize: 13,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 5,
     color: '#333',
+    ...typography.regular,
+  },
+  inputContainer: {
+    position: 'relative',
+  },
+  absoluteBlur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
   input: {
-    fontSize: 16,
+    fontSize: 13,
     borderWidth: 1,
     borderColor: '#333',
     padding: 15,
     borderRadius: 5,
+    backgroundColor: '#fff', // Background color for input
   },
 });

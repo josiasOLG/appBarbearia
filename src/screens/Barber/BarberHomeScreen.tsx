@@ -105,7 +105,8 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                 style={[
                   styles.cardServico,
                   {backgroundColor: themeColors.secondary},
-                ]}>
+                ]}
+                onPress={() => navigation.navigate('ConfirmationScreen')}>
                 <View style={styles.roundedIcon}>
                   <IconCheckList
                     width={40}

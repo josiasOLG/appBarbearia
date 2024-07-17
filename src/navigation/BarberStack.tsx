@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import SettingsScreen from '../screens/base/SettingsScreen';
 import {
   noHeaderOption,
   hiddenBackButtonOption,
@@ -16,6 +15,8 @@ import {useSelector} from 'react-redux';
 import ServiceSelectionScreen from '../screens/base/ServiceSelectionScreen';
 import ServiceRegistrationScreen from '../screens/Barber/ServiceRegistrationScreen';
 import ProfileScreen from '../screens/base/ProfileScreen';
+import ConfirmationScreen from '../screens/Barber/ConfirmationScreen';
+import SettingsBarberScreen from '../screens/Barber/SettingsBarberScreen';
 const BarberStack = createStackNavigator();
 
 export const BarberStackNavigator = () => {
@@ -36,8 +37,8 @@ export const BarberStackNavigator = () => {
         options={{...noHeaderOption, ...hiddenBackButtonOption}}
       />
       <BarberStack.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
+        name="SettingsBarberScreen"
+        component={SettingsBarberScreen}
         options={{
           headerTitle: 'Configurações',
           headerStyle: [
@@ -77,6 +78,19 @@ export const BarberStackNavigator = () => {
       <BarberStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
+        options={{
+          headerTitle: 'Perfil',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="ConfirmationScreen"
+        component={ConfirmationScreen}
         options={{
           headerTitle: 'Perfil',
           headerStyle: [

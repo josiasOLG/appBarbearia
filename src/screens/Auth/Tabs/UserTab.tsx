@@ -1,3 +1,4 @@
+// UserTab.tsx (atualizado)
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -25,14 +26,16 @@ import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {AuthService} from '../../../api/AuthService';
 import {setUser} from '../../../store/reducers/user.reducer';
+import {
+  showLoading,
+  hideLoading,
+} from '../../../store/reducers/loading.reducer'; // Import loading actions
 import {useNavigation} from '@react-navigation/native';
 import * as Keychain from 'react-native-keychain';
-import LoadingScreen from '../../base/LoadingScreen';
 import CustomModal from '../../../components/atoms/CustomModal/CustomModal';
 
 const UserTab: React.FC<any> = () => {
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState<{
     title: string;
@@ -69,7 +72,7 @@ const UserTab: React.FC<any> = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await setIsLoading(true);
+      dispatch(showLoading('Signing in with Google...'));
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       const {idToken} = await GoogleSignin.getTokens();
@@ -91,12 +94,13 @@ const UserTab: React.FC<any> = () => {
           response.headers['access-token'],
         );
 
-        const {userId, username, descricao, certificacoes, image} =
+        const {userId, username, descricao, certificacoes, image, email} =
           response.data;
 
         dispatch(
           setUser({
             id: userId,
+            email: email,
             username: user.displayName || username,
             descricao: descricao || '',
             certificacoes: certificacoes || '',
@@ -105,11 +109,9 @@ const UserTab: React.FC<any> = () => {
             type: 'BARBER',
           }),
         );
-        setIsLoading(false);
         navigation.navigate('ServiceSelectionScreen');
       }
     } catch (error: any) {
-      setIsLoading(false);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // Usuário cancelou o login
       } else {
@@ -120,11 +122,13 @@ const UserTab: React.FC<any> = () => {
         });
         setShowModal(true);
       }
+    } finally {
+      dispatch(hideLoading());
     }
   };
 
   const handleModalSubmit = async () => {
-    setIsLoading(true);
+    dispatch(showLoading('Sending recovery email...'));
     try {
       await AuthService.recoverPassword(modalInput);
       setModalMessage({
@@ -132,13 +136,13 @@ const UserTab: React.FC<any> = () => {
         mensagem: 'Email de recuperação de senha enviado com sucesso.',
       });
       navigation.navigate('ValidarCodigoSMS', {email: modalInput});
-      setIsLoading(false);
     } catch (error) {
       setModalMessage({
         title: 'Erro ao enviar email',
         mensagem: 'Erro ao enviar email de recuperação de senha.',
       });
-      setIsLoading(false);
+    } finally {
+      dispatch(hideLoading());
     }
   };
 
@@ -147,10 +151,19 @@ const UserTab: React.FC<any> = () => {
   };
 
   const handleLogin = async (data?: any) => {
-    setIsLoading(true);
+    dispatch(showLoading('Logging in...'));
     try {
       const response = await AuthService.login(data);
-      const {user_id, display_name, role} = response.data;
+      console.log(response);
+      const {
+        user_id,
+        display_name,
+        role,
+        email,
+        descricao,
+        certificacoes,
+        image,
+      } = response.data;
 
       await Keychain.setGenericPassword(
         'accessToken',
@@ -167,25 +180,22 @@ const UserTab: React.FC<any> = () => {
       dispatch(
         setUser({
           id: user_id,
+          email: email,
+          descricao: descricao,
+          certificacoes: certificacoes,
           username: display_name || '',
           isLoggedIn: true,
           type: role,
+          image: image,
         }),
       );
 
       navigation.navigate('ServiceSelectionScreen');
     } catch (error) {
-      console.log('error >>', error);
-      setIsLoading(false);
+      console.log('error2e >>', error);
+    } finally {
+      dispatch(hideLoading());
     }
-  };
-
-  const handleLoginSuccess = () => {
-    // Lógica adicional após o sucesso do login, se necessário
-  };
-
-  const handleLoginError = (errorMessage: string) => {
-    // Lógica adicional para lidar com erros de login, se necessário
   };
 
   return (
@@ -268,13 +278,6 @@ const UserTab: React.FC<any> = () => {
             <Text style={styles.socialButtonText}>Facebook</Text>
           </TouchableOpacity>
         </View>
-        <LoadingScreen
-          visible={isLoading}
-          onSuccess={handleLoginSuccess}
-          onError={handleLoginError}
-          successScreen="HomeScreen"
-          errorScreen="LoginScreen"
-        />
         <CustomModal
           visible={showModal}
           message={modalMessage}
@@ -343,7 +346,6 @@ const styles = StyleSheet.create({
   },
   error: {
     color: '#fff',
-
     marginBottom: hp('2%'),
     fontSize: fonts.body,
   },

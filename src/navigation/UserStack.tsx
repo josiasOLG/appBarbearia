@@ -8,7 +8,7 @@ import {
 
 import HomeScreen from '../screens/User/HomeScreen';
 import BarberListScreen from '../screens/User/BarberListScreen';
-import SettingsScreen from '../screens/base/SettingsScreen';
+import SettingsScreen from '../screens/User/SettingsScreen';
 import CadastrarCartaoScreen from '../screens/Barber/Assinatura/CadastrarCartaoScreen';
 import AssinaturaScreen from '../screens/Barber/Assinatura/AssinaturaScreen';
 import {StyleSheet} from 'react-native';
@@ -25,6 +25,9 @@ import AppointmentSummaryScreen from '../screens/User/AppointmentSummaryScreen';
 import ProfileScreen from '../screens/base/ProfileScreen';
 import StatusListScreen from '../screens/User/StatusListScreen';
 import AppointmentDetailsScreen from '../screens/User/AppointmentDetailsScreen';
+import FidelityScreen from '../screens/User/FidelityScreen';
+import FidelityDetailScreen from '../screens/User/FidelityDetailScreen';
+import QRCodeScreen from '../screens/User/QRCodeScreen';
 
 const UserStack = createStackNavigator();
 
@@ -123,16 +126,57 @@ export const UserStackNavigator = () => {
         }}
       />
       <UserStack.Screen
+        name="FidelityScreen"
+        component={FidelityScreen}
+        options={{
+          headerTitle: '',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.secondary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <UserStack.Screen
+        name="FidelityDetailScreen"
+        component={FidelityDetailScreen}
+        options={{
+          headerTitle: '',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.secondary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+
+      <UserStack.Screen
+        name="QRCodeScreen"
+        component={QRCodeScreen}
+        options={{
+          headerTitle: '',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.secondary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+
+      <UserStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
         options={{
           headerTitle: 'Configurações',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColors.primary},
+            {backgroundColor: themeColors.white},
           ],
-          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
-          headerTintColor: '#fff',
+          headerTitleStyle: [styles.headerTitle, typography.semiBold],
+          headerTintColor: '#333',
         }}
       />
       <UserStack.Screen
@@ -185,10 +229,10 @@ export const UserStackNavigator = () => {
           headerTitle: 'Cadastrar endereço',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColors.primary},
+            {backgroundColor: themeColors.white},
           ],
-          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
-          headerTintColor: '#fff',
+          headerTitleStyle: [styles.headerTitle, typography.semiBold],
+          headerTintColor: '#333',
         }}
       />
       <UserStack.Screen
@@ -198,10 +242,10 @@ export const UserStackNavigator = () => {
           headerTitle: 'Perfil',
           headerStyle: [
             styles.headerTransparent,
-            {backgroundColor: themeColors.primary},
+            {backgroundColor: themeColors.white},
           ],
-          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
-          headerTintColor: '#fff',
+          headerTitleStyle: [styles.headerTitle, typography.semiBold],
+          headerTintColor: '#333',
         }}
       />
     </UserStack.Navigator>
@@ -220,12 +264,12 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#333',
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   headerTitleWhite: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

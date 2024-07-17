@@ -16,6 +16,7 @@ import StatusCard from '../../components/organisms/StatusCard/StatusCard';
 import colors from '../../styles/colors/Colors';
 import {AppointmentService} from '../../api/AppointmentService';
 import EcoIcon from '../../assets/icons/eco.svg';
+import moment from 'moment';
 
 interface Appointment {
   barberId: string;
@@ -23,10 +24,13 @@ interface Appointment {
   date: string;
   time: string;
   status: string;
+  statusAprovacao: string;
+  statusMensage?: string;
   userId: string;
   notes: string;
   service: string[];
   userIcons: string[];
+  statusPoint?: boolean;
 }
 
 const StatusListScreen: React.FC = () => {
@@ -88,21 +92,28 @@ const StatusListScreen: React.FC = () => {
           </Text>
         </View>
         <View style={styles.cardsContainer}>
-          {appointments.map((appointment, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleCardPress(appointment)}
-              style={styles.cardWrapper}>
-              <StatusCard
-                barberName={appointment.barberName}
-                date={appointment.date}
-                time={appointment.time}
-                status={appointment.status}
-                userIcons={appointment.userIcons || []}
-                themeColors={themeColors}
-              />
-            </TouchableOpacity>
-          ))}
+          {appointments.map((appointment, index) => {
+            const isPastAppointment = moment().isAfter(
+              moment(appointment.date),
+            );
+            return (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleCardPress(appointment)}
+                style={styles.cardWrapper}>
+                <StatusCard
+                  barberName={appointment.barberName}
+                  date={appointment.date}
+                  time={appointment.time}
+                  status={appointment.status}
+                  statusAprovacao={appointment.statusAprovacao}
+                  userIcons={appointment.userIcons || []}
+                  themeColors={themeColors}
+                  isPastAppointment={isPastAppointment} // Passing this prop to StatusCard
+                />
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </ScrollView>
     </LinearGradient>

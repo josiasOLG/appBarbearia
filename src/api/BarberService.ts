@@ -4,8 +4,12 @@ const getServices = async (id: number) => {
   return ApiClient.get(`/barber-services/${id}`);
 };
 
-const addService = async (userId: string, serviceName: string) => {
-  return ApiClient.post('/barber-services', {userId, name: serviceName});
+const addService = async (userId: string, serviceName: string, points: any) => {
+  return ApiClient.post('/barber-services', {
+    userId,
+    name: serviceName,
+    points: points,
+  });
 };
 
 const deleteService = async (id: number) => {
@@ -13,7 +17,6 @@ const deleteService = async (id: number) => {
 };
 
 const getAllServicePerfils = async (barberId: string) => {
-  console.log(barberId);
   return ApiClient.get(`/barber-services/services/${barberId}`);
 };
 

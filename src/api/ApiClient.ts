@@ -1,14 +1,10 @@
 import axios from 'axios';
 import * as Keychain from 'react-native-keychain';
 
-const API_BASE_URL = 'http://192.168.56.1:3000';
+const API_BASE_URL = 'https://apib-arbearia.vercel.app';
 
 const ApiClient = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
 });
 
 ApiClient.interceptors.request.use(async config => {

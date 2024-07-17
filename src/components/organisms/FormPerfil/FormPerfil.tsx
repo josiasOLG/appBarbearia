@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   placeholderImage: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 100,
     backgroundColor: '#eee',
     justifyContent: 'center',

@@ -5,6 +5,7 @@ import userReducer from './reducers/user.reducer';
 import planReducer from './reducers/plan.reducer';
 import subscriptionReducer from './reducers/subscription.reducer';
 import serviceReducer from './reducers/service.reducer';
+import loadingReducer from './reducers/loading.reducer';
 
 const persistConfig = {
   key: 'root',
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   plan: planReducer,
   subscription: subscriptionReducer,
   service: serviceReducer,
+  loading: loadingReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
