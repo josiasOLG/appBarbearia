@@ -1,15 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import FormField from '../../molecules/FormField/FormField';
 import IconButton from '../../atoms/Icon/IconButton';
 import {useNavigation} from '@react-navigation/native';
 import {getAddressByUserId, updateAddress} from '../../../api/AddressService';
 import typography from '../../../styles/typographys/typography';
 import colors from '../../../styles/colors/Colors';
+import {
+  hideLoading,
+  showLoading,
+} from '../../../store/reducers/loading.reducer';
 
 interface AddressFormData {
   id?: string;
@@ -47,7 +51,7 @@ const EnderecoForm: React.FC = () => {
   } = useForm<AddressFormData>({resolver: yupResolver(schema)});
   const navigation = useNavigation();
   const user = useSelector((state: any) => state.user);
-  const service = useSelector((state: any) => state.service);
+  const dispatch = useDispatch();
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
   const [loading, setLoading] = useState(true);
@@ -81,10 +85,13 @@ const EnderecoForm: React.FC = () => {
   }, [user.user.id, setValue]);
 
   const handleRegister: SubmitHandler<AddressFormData> = async data => {
+    dispatch(showLoading('Cadastrando endereço...'));
     try {
       await updateAddress(user.user.id, data);
+      dispatch(hideLoading());
     } catch (error: any) {
       console.log(error);
+      dispatch(hideLoading());
     }
   };
 

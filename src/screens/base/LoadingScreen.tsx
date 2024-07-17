@@ -5,7 +5,10 @@ interface LoadingScreenProps {
   visible: boolean;
   message: string;
   onSuccess?: () => void;
-  onError?: (errorMessage: string) => void;
+  onError?: (
+    errorMessage: string,
+    type?: 'error' | 'warning' | 'success',
+  ) => void;
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
@@ -21,7 +24,8 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
         if (Math.random() < 0.5) {
           onSuccess && onSuccess();
         } else {
-          onError && onError('Ocorreu um erro. Por favor, tente novamente.');
+          onError &&
+            onError('Ocorreu um erro. Por favor, tente novamente.', 'error');
         }
       }, 2000);
     }

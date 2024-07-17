@@ -21,11 +21,16 @@ const AppWrapper: React.FC = () => {
             visible={isLoading}
             message={loadingMessage}
             onSuccess={() => dispatch(hideLoading())}
-            onError={message => {
+            onError={(message, type = 'error') => {
               dispatch(hideLoading());
               Toast.show({
-                type: 'error',
-                text1: 'Erro',
+                type: type,
+                text1:
+                  type === 'success'
+                    ? 'Sucesso'
+                    : type === 'warning'
+                    ? 'Aviso'
+                    : 'Erro',
                 text2: message,
               });
             }}

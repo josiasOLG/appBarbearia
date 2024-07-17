@@ -12,11 +12,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../styles/colors/Colors';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {request, PERMISSIONS} from 'react-native-permissions';
 import {UserService} from '../../api/UserService';
 import FormPerfil from '../../components/organisms/FormPerfil/FormPerfil';
 import LoadingModal from '../../components/organisms/LoadingModal/LoadingModal';
 import {updateProfile} from '../../store/reducers/user.reducer';
+import {showLoading, hideLoading} from '../../store/reducers/loading.reducer';
 
 const ProfileScreen: React.FC = () => {
   const dispatch = useDispatch();
@@ -74,7 +75,7 @@ const ProfileScreen: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
+    dispatch(showLoading('Atualizando perfil...'));
     try {
       const profileData = {
         name: name,
@@ -95,33 +96,17 @@ const ProfileScreen: React.FC = () => {
       if (response.data) {
         dispatch(updateProfile(response.data));
       }
+      dispatch(hideLoading());
     } catch (error) {
       console.error('Failed to update profile', error);
-      setLoading(false);
-    } finally {
-      setLoading(false);
+      dispatch(hideLoading());
+      // Mostrar Toast de erro
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Falha ao atualizar o perfil. Por favor, tente novamente.',
+      });
     }
-  };
-
-  const handleImageUpload = async () => {
-    // if (!profileImage) return;
-    // setLoading(true);
-    // try {
-    //   const formData = new FormData();
-    //   formData.append('profileImage', {
-    //     uri: profileImage,
-    //     type: 'image/jpeg',
-    //     name: 'profile.jpg',
-    //   });
-    //   const response = await UserService.uploadProfileImage(user.user.id, formData);
-    //   if (response.data) {
-    //     dispatch({type: 'UPDATE_USER_IMAGE', payload: response.data});
-    //   }
-    // } catch (error) {
-    //   console.error('Failed to upload image', error);
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   return (

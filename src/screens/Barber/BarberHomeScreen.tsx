@@ -6,8 +6,6 @@ import {
   StyleSheet,
   StatusBar,
   TouchableOpacity,
-  TextInput,
-  Platform,
   ScrollView,
 } from 'react-native';
 import IconCalendar from '../../assets/icons/iconCalendar.svg';
@@ -18,8 +16,12 @@ import {GlobalLayoutStyles} from '../../styles/GlobalLayoutStyles';
 import typography from '../../styles/typographys/typography';
 import {KeyboardAvoidingView} from 'react-native';
 import {useSelector} from 'react-redux';
-import colors from '../../styles/colors/Colors'; // Importar cores
+import colors from '../../styles/colors/Colors';
 import CustomIcon from '../../components/atoms/Icon/Icon';
+import {getAddressByUserId} from '../../api/AddressService';
+import {getUserDataHours} from '../../api/UserService';
+import CustomModal from '../../components/atoms/CustomModal/CustomModal';
+import {useFocusEffect} from '@react-navigation/native';
 
 interface HomeScreenProps {
   navigation: any;
@@ -29,6 +31,107 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const user = useSelector((state: any) => state.user);
   const userRole = user?.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
+
+  const addressRequiredFields = [
+    {key: 'zipCode', label: 'CEP'},
+    {key: 'cpf', label: 'CPF'},
+    {key: 'phoneNumber', label: 'Telefone'},
+    {key: 'number', label: 'Número'},
+    {key: 'complement', label: 'Complemento'},
+  ];
+
+  const hoursRequiredFields = [
+    {key: 'startTime', label: 'Horário de Início'},
+    {key: 'lunchStartTime', label: 'Início do Almoço'},
+    {key: 'lunchEndTime', label: 'Fim do Almoço'},
+    {key: 'endTime', label: 'Horário de Término'},
+    {key: 'interval', label: 'Intervalo'},
+  ];
+
+  const checkAddress = useCallback(async () => {
+    try {
+      const address = await getAddressByUserId(user.user.id);
+      const missingFieldsList: string[] = [];
+
+      if (address.length > 0 && address[0]) {
+        addressRequiredFields.forEach(field => {
+          if (!address[0][field.key]) {
+            missingFieldsList.push(field.label);
+          }
+        });
+
+        if (missingFieldsList.length === 0) {
+          await checkUserHours(); // Verificação em cadeia
+        } else {
+          setMissingFields(missingFieldsList);
+          setModalVisible(true);
+        }
+      } else {
+        addressRequiredFields.forEach(field =>
+          missingFieldsList.push(field.label),
+        );
+        setMissingFields(missingFieldsList);
+        setModalVisible(true);
+      }
+    } catch (error) {
+      console.error('Error fetching address:', error);
+      setMissingFields(addressRequiredFields.map(field => field.label));
+      setModalVisible(true);
+    }
+  }, [user.user.id]);
+
+  const checkUserHours = async () => {
+    try {
+      const hours = await getUserDataHours(user.user.id);
+      const missingFieldsList: string[] = [];
+
+      if (hours) {
+        hoursRequiredFields.forEach(field => {
+          if (!hours[field.key]) {
+            missingFieldsList.push(field.label);
+          }
+        });
+
+        if (missingFieldsList.length === 0) {
+          // Todas as verificações passaram
+          return;
+        } else {
+          setMissingFields(missingFieldsList);
+          setModalVisible(true);
+        }
+      } else {
+        hoursRequiredFields.forEach(field =>
+          missingFieldsList.push(field.label),
+        );
+        setMissingFields(missingFieldsList);
+        setModalVisible(true);
+      }
+    } catch (error) {
+      console.error('Error fetching user hours:', error);
+      setMissingFields(hoursRequiredFields.map(field => field.label));
+      setModalVisible(true);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      checkAddress();
+    }, [checkAddress]),
+  );
+
+  const handleGoToAddress = () => {
+    setModalVisible(false);
+    navigation.navigate('CadastrarEnderecoScreen');
+  };
+
+  const handleGoToHours = () => {
+    setModalVisible(false);
+    navigation.navigate('ProfileScreen');
+  };
+
   return (
     <LinearGradient
       colors={[themeColors.primary, themeColors.primary]}
@@ -144,7 +247,7 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => navigation.navigate('SettingsScreen')}
+                onPress={() => navigation.navigate('SettingsBarberScreen')}
                 style={[
                   styles.cardServico,
                   {backgroundColor: themeColors.secondary},
@@ -160,13 +263,30 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                   Configurações
                 </Text>
                 <Text style={[styles.cardTextSmallServico, typography.light]}>
-                  E area do usuário
+                  E área do usuário
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <CustomModal
+        visible={modalVisible}
+        message={{
+          title: 'Atualizar Informações',
+          mensagem: `Por favor, atualize suas informações para continuar. Os seguintes campos estão faltando: ${missingFields.join(
+            ', ',
+          )}`,
+        }}
+        submitButtonText="Ir para a tela"
+        showInput={false}
+        onClose={
+          missingFields.includes('CEP') ? handleGoToAddress : handleGoToHours
+        }
+        onSubmit={
+          missingFields.includes('CEP') ? handleGoToAddress : handleGoToHours
+        }
+      />
     </LinearGradient>
   );
 };

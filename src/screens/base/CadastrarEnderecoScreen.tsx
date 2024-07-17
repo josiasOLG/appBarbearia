@@ -14,9 +14,9 @@ import colors from '../../styles/colors/Colors';
 
 const CadastrarEnderecoScreen: React.FC = () => {
   const user = useSelector((state: any) => state.user);
-  const service = useSelector((state: any) => state.service);
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
+
   return (
     <LinearGradient
       style={styles.container}
@@ -26,7 +26,8 @@ const CadastrarEnderecoScreen: React.FC = () => {
         barStyle="light-content"
       />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.keyboardAvoidingView}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <EnderecoForm />
         </ScrollView>
@@ -40,9 +41,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContainer: {
-    flexGrow: 0,
+    flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
 });
 

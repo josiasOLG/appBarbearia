@@ -1,11 +1,12 @@
 import React, {useRef} from 'react';
-import {View, Text, Image, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, StatusBar, Image} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
-import EcoIcon from '../../assets/icons/eco.svg';
-import OnboradingIcon1 from '../../assets/icons/onborading1.svg';
 import typography from '../../styles/typographys/typography';
+import CustomIcon from '../../components/atoms/Icon/Icon';
+
+import Screen1 from '../../assets/images/screen.png';
 
 interface Slide {
   key: string;
@@ -18,23 +19,23 @@ interface Slide {
 const slides: Slide[] = [
   {
     key: 'one',
-    title: 'Bem-Vindo à StyleCut',
-    text: 'Conquiste o visual perfeito com mestres barbeiros ao toque de um botão',
-    image: OnboradingIcon1,
+    title: 'Seamless Flower Shopping Experience',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt',
+    image: Screen1,
     backgroundColor: '#fff',
   },
   {
     key: 'two',
-    title: 'Serviços Exclusivos',
-    text: 'Descubra uma ampla gama de serviços - corte clássico, barba artesanal e tratamentos premium',
-    image: OnboradingIcon1,
+    title: 'Exclusive Services',
+    text: 'Discover a wide range of services - classic cut, handcrafted beard, and premium treatments',
+    image: Screen1,
     backgroundColor: '#fff',
   },
   {
     key: 'three',
-    title: 'Agende Seu Horário',
-    text: 'Escolha seu barbeiro favorito, selecione o serviço desejado e marque o melhor horário para você.',
-    image: OnboradingIcon1,
+    title: 'Book Your Appointment',
+    text: 'Choose your favorite barber, select the desired service, and book the best time for you.',
+    image: Screen1,
     backgroundColor: '#fff',
   },
 ];
@@ -47,10 +48,17 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({navigation}) => {
   const sliderRef = useRef<AppIntroSlider<Slide>>(null);
 
   const renderSlide = ({item}: {item: Slide}) => (
-    <View style={[styles.slide]}>
-      <Text style={[styles.title, typography.bold]}>{item.title}</Text>
-      <Text style={[styles.text, typography.light]}>{item.text}</Text>
-      <OnboradingIcon1 width={300} color={'#fff'} style={styles.image} />
+    <View style={styles.slide}>
+      <View style={styles.imageBackground}>
+        <Image source={item.image} style={styles.image} />
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={[styles.title, typography.bold]}>
+          <Text style={styles.highlight}>Seamless </Text>
+          <Text>Flower Shopping Experience</Text>
+        </Text>
+        <Text style={[styles.text, typography.light]}>{item.text}</Text>
+      </View>
     </View>
   );
 
@@ -64,36 +72,39 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({navigation}) => {
   };
 
   const renderNextButton = () => (
-    <View style={styles.buttonWrapper}>
-      <Text style={styles.buttonText}>Proximo</Text>
+    <View style={[styles.buttonWrapper, styles.shadow]}>
+      <CustomIcon
+        name="arrow-right"
+        type="font-awesome"
+        color="#fff"
+        size={20}
+        style={styles.iconBtnRight}
+      />
     </View>
   );
 
-  const renderSkipButton = () => {
-    const currentIndex = sliderRef.current?.state.activeIndex || 0;
-    const isFirstSlide = currentIndex === 0;
-
-    return (
-      <View
-        style={[
-          styles.buttonWrapperSkip,
-          isFirstSlide && styles.disabledButton,
-        ]}>
-        <Text style={styles.buttonTextSkip}>Pular</Text>
-      </View>
-    );
-  };
+  const renderSkipButton = () => (
+    <View style={[styles.buttonWrapperSkip, styles.shadow]}>
+      <Text style={styles.buttonTextSkip}>Skip</Text>
+    </View>
+  );
 
   const renderDoneButton = () => (
-    <View style={styles.buttonWrapper}>
-      <Text style={styles.buttonText}>Ok</Text>
+    <View style={[styles.buttonWrapper, styles.shadow]}>
+      <CustomIcon
+        name="check"
+        type="font-awesome"
+        color="#fff"
+        size={20}
+        style={styles.iconBtnRight}
+      />
     </View>
   );
 
   return (
-    <LinearGradient colors={['#7b67e9', '#624ed1']} style={styles.gradient}>
-      <StatusBar backgroundColor={'#624ed1'} />
-      <EcoIcon style={styles.iconBack} />
+    <LinearGradient colors={['#fff', '#fff']} style={styles.gradient}>
+      <StatusBar barStyle="dark-content" backgroundColor={'#efeeea'} />
+
       <AppIntroSlider<Slide>
         ref={sliderRef}
         renderItem={renderSlide}
@@ -104,8 +115,8 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({navigation}) => {
         renderNextButton={renderNextButton}
         renderSkipButton={renderSkipButton}
         renderDoneButton={renderDoneButton}
-        dotStyle={{...styles.dotStyle, width: 0, height: 0}}
-        activeDotStyle={{...styles.activeDotStyle, width: 0, height: 0}}
+        dotStyle={styles.dotStyle}
+        activeDotStyle={styles.activeDotStyle}
       />
     </LinearGradient>
   );
@@ -114,60 +125,107 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    paddingHorizontal: 0,
   },
   gradient: {
     flex: 1,
   },
+  imageBackground: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 0,
+    backgroundColor: '#efeeea', // Background cinza
+    borderBottomLeftRadius: 50, // Bordas arredondadas na parte inferior
+    borderBottomRightRadius: 50,
+    paddingBottom: 0,
+    paddingTop: 40,
+  },
   image: {
-    marginBottom: 0,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: 40,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 34,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#fff',
-    marginVertical: 20,
+    color: '#333', // Default color for the rest of the title
+    marginBottom: 10,
+  },
+  highlight: {
+    color: '#4231a4', // Highlight color
   },
   text: {
-    fontSize: 22,
+    fontSize: 18,
     textAlign: 'center',
-    color: '#fff',
+    color: '#333',
+    marginBottom: 20,
   },
   dotStyle: {
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: '#C4C4C4',
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
   },
   activeDotStyle: {
-    backgroundColor: '#000',
+    backgroundColor: '#4231a4',
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
   },
   buttonWrapper: {
     paddingVertical: 10,
-    paddingHorizontal: 40,
-    borderRadius: 15,
-    backgroundColor: '#5350d3',
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    backgroundColor: '#4231a4',
   },
   buttonWrapperSkip: {
     paddingVertical: 10,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    backgroundColor: '#FFF',
+    marginHorizontal: 10,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 20,
-  },
-  buttonTextSkip: {
-    color: '#fff',
     fontSize: 16,
   },
-  disabledButton: {
-    opacity: 0.5,
+  buttonTextSkip: {
+    color: '#4231a4',
+    fontSize: 16,
+  },
+  iconBtnRight: {
+    alignSelf: 'center',
   },
   iconBack: {
     position: 'absolute',
+    top: 40,
+    left: 20,
     opacity: 0.3,
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
 });
 

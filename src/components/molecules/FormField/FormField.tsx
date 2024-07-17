@@ -76,11 +76,6 @@ const FormField: React.FC<FormFieldProps> = ({
         </Text>
       )}
       <View style={styles.inputContainer}>
-        <BlurView
-          style={styles.absoluteBlur}
-          blurType="light"
-          blurAmount={10}
-        />
         <Controller
           control={control}
           name={name}
@@ -132,13 +127,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     position: 'relative',
   },
-  absoluteBlur: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
+
   input: {
     fontSize: 13,
     borderWidth: 1,

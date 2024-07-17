@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import typography from '../../../styles/typographys/typography';
-import IconButton from '../Icon/IconButton';
 import CustomIcon from '../Icon/Icon';
 
 interface CustomModalProps {
@@ -21,25 +20,36 @@ interface CustomModalProps {
   onChangeInput?: (value: string) => void;
   onClose?: () => void;
   onSubmit?: () => void;
+  closeButtonText?: string;
+  submitButtonText?: string;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
-  visible,
-  message,
+  visible = false,
+  message = {title: '', mensagem: ''},
   showInput = false,
   inputType = 'text',
   inputValue = '',
   onChangeInput,
   onClose,
   onSubmit,
+  closeButtonText,
+  submitButtonText = 'Submit',
 }) => {
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.container}>
         <View style={styles.modal}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <CustomIcon name="close" size={24} color="#000" type="material" />
-          </TouchableOpacity>
+          {closeButtonText && (
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <CustomIcon
+                name="close"
+                size={24}
+                color="#FFFFFF"
+                type="material"
+              />
+            </TouchableOpacity>
+          )}
           <Text style={[styles.title, typography.bold]}>{message.title}</Text>
           <Text style={[styles.message, typography.light]}>
             {message.mensagem}
@@ -53,13 +63,24 @@ const CustomModal: React.FC<CustomModalProps> = ({
               secureTextEntry={inputType === 'password'}
             />
           )}
-          <IconButton
-            iconName="map-marker"
-            text="Enviar email"
-            onPress={onSubmit || onClose}
-            style={styles.button}
-            textColor="#fff"
-          />
+          <View style={styles.buttonContainer}>
+            {closeButtonText && (
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={onClose}>
+                <Text style={styles.buttonText}>{closeButtonText}</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.deleteButton,
+                !closeButtonText && styles.singleButton, // Ajuste de estilo para um único botão
+              ]}
+              onPress={onSubmit || onClose}>
+              <Text style={styles.buttonText}>{submitButtonText}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -76,10 +97,17 @@ const styles = StyleSheet.create({
   modal: {
     width: '80%',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#1C1C1C',
     borderRadius: 10,
-    alignItems: 'center',
-    position: 'relative',
+    alignItems: 'flex-start',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   closeButton: {
     position: 'absolute',
@@ -87,12 +115,13 @@ const styles = StyleSheet.create({
     right: 10,
   },
   title: {
-    color: '#7b67e9',
-    fontSize: 24,
+    color: '#FFFFFF',
+    fontSize: 18,
     marginBottom: 10,
   },
   message: {
-    fontSize: 16,
+    color: '#B0B0B0',
+    fontSize: 14,
     marginBottom: 20,
   },
   input: {
@@ -102,19 +131,33 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     marginBottom: 20,
+    color: '#FFFFFF', // Texto do input
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
   },
   button: {
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    backgroundColor: '#7b67e9',
+    flex: 1,
+    paddingVertical: 10,
     borderRadius: 5,
-    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  cancelButton: {
+    backgroundColor: '#343434',
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
   },
   buttonText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 16,
+  },
+  singleButton: {
+    width: '100%', // Largura 100% quando há apenas um botão
   },
 });
 

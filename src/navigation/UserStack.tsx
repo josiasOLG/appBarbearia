@@ -45,6 +45,19 @@ export const UserStackNavigator = () => {
         component={HomeScreen}
       />
       <UserStack.Screen
+        name="SettingsScreen"
+        component={SettingsScreen}
+        options={{
+          headerTitle: 'Configurações',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.white},
+          ],
+          headerTitleStyle: [styles.headerTitle, typography.semiBold],
+          headerTintColor: '#333',
+        }}
+      />
+      <UserStack.Screen
         name="ServiceSelectionScreen"
         options={{...noHeaderOption, ...hiddenBackButtonOption}}
         component={ServiceSelectionScreen}
@@ -166,19 +179,6 @@ export const UserStackNavigator = () => {
         }}
       />
 
-      <UserStack.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
-        options={{
-          headerTitle: 'Configurações',
-          headerStyle: [
-            styles.headerTransparent,
-            {backgroundColor: themeColors.white},
-          ],
-          headerTitleStyle: [styles.headerTitle, typography.semiBold],
-          headerTintColor: '#333',
-        }}
-      />
       <UserStack.Screen
         name="AssinaturaScreen"
         component={AssinaturaScreen}
