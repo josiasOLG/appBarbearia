@@ -1,1 +1,1 @@
-export const API_BASE_URL = 'https://apib-arbearia.vercel.app';
+export const API_BASE_URL = 'http://192.168.56.1:3000';

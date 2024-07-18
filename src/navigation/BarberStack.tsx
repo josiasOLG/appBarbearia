@@ -17,6 +17,7 @@ import ServiceRegistrationScreen from '../screens/Barber/ServiceRegistrationScre
 import ProfileScreen from '../screens/base/ProfileScreen';
 import ConfirmationScreen from '../screens/Barber/ConfirmationScreen';
 import SettingsBarberScreen from '../screens/Barber/SettingsBarberScreen';
+import QRCodeScannerScreen from '../screens/Barber/QRCodeScannerScreen';
 const BarberStack = createStackNavigator();
 
 export const BarberStackNavigator = () => {
@@ -93,6 +94,19 @@ export const BarberStackNavigator = () => {
         component={ConfirmationScreen}
         options={{
           headerTitle: 'Perfil',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="QRCodeScannerScreen"
+        component={QRCodeScannerScreen}
+        options={{
+          headerTitle: 'Qr code',
           headerStyle: [
             styles.headerTransparent,
             {backgroundColor: themeColors.primary},

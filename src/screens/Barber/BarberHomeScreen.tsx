@@ -1,12 +1,12 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback} from 'react';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import IconCalendar from '../../assets/icons/iconCalendar.svg';
 import IconCheckList from '../../assets/icons/iconChecklist.svg';
@@ -14,14 +14,12 @@ import IconConfig from '../../assets/icons/iconConfig.svg';
 import LinearGradient from 'react-native-linear-gradient';
 import {GlobalLayoutStyles} from '../../styles/GlobalLayoutStyles';
 import typography from '../../styles/typographys/typography';
-import {KeyboardAvoidingView} from 'react-native';
 import {useSelector} from 'react-redux';
 import colors from '../../styles/colors/Colors';
 import CustomIcon from '../../components/atoms/Icon/Icon';
-import {getAddressByUserId} from '../../api/AddressService';
-import {getUserDataHours} from '../../api/UserService';
 import CustomModal from '../../components/atoms/CustomModal/CustomModal';
 import {useFocusEffect} from '@react-navigation/native';
+import useCheckFields from '../../hooks/useCheckFields'; // Atualize o caminho conforme necessário
 
 interface HomeScreenProps {
   navigation: any;
@@ -32,89 +30,8 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const userRole = user?.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [missingFields, setMissingFields] = useState<string[]>([]);
-
-  const addressRequiredFields = [
-    {key: 'zipCode', label: 'CEP'},
-    {key: 'cpf', label: 'CPF'},
-    {key: 'phoneNumber', label: 'Telefone'},
-    {key: 'number', label: 'Número'},
-    {key: 'complement', label: 'Complemento'},
-  ];
-
-  const hoursRequiredFields = [
-    {key: 'startTime', label: 'Horário de Início'},
-    {key: 'lunchStartTime', label: 'Início do Almoço'},
-    {key: 'lunchEndTime', label: 'Fim do Almoço'},
-    {key: 'endTime', label: 'Horário de Término'},
-    {key: 'interval', label: 'Intervalo'},
-  ];
-
-  const checkAddress = useCallback(async () => {
-    try {
-      const address = await getAddressByUserId(user.user.id);
-      const missingFieldsList: string[] = [];
-
-      if (address.length > 0 && address[0]) {
-        addressRequiredFields.forEach(field => {
-          if (!address[0][field.key]) {
-            missingFieldsList.push(field.label);
-          }
-        });
-
-        if (missingFieldsList.length === 0) {
-          await checkUserHours(); // Verificação em cadeia
-        } else {
-          setMissingFields(missingFieldsList);
-          setModalVisible(true);
-        }
-      } else {
-        addressRequiredFields.forEach(field =>
-          missingFieldsList.push(field.label),
-        );
-        setMissingFields(missingFieldsList);
-        setModalVisible(true);
-      }
-    } catch (error) {
-      console.error('Error fetching address:', error);
-      setMissingFields(addressRequiredFields.map(field => field.label));
-      setModalVisible(true);
-    }
-  }, [user.user.id]);
-
-  const checkUserHours = async () => {
-    try {
-      const hours = await getUserDataHours(user.user.id);
-      const missingFieldsList: string[] = [];
-
-      if (hours) {
-        hoursRequiredFields.forEach(field => {
-          if (!hours[field.key]) {
-            missingFieldsList.push(field.label);
-          }
-        });
-
-        if (missingFieldsList.length === 0) {
-          // Todas as verificações passaram
-          return;
-        } else {
-          setMissingFields(missingFieldsList);
-          setModalVisible(true);
-        }
-      } else {
-        hoursRequiredFields.forEach(field =>
-          missingFieldsList.push(field.label),
-        );
-        setMissingFields(missingFieldsList);
-        setModalVisible(true);
-      }
-    } catch (error) {
-      console.error('Error fetching user hours:', error);
-      setMissingFields(hoursRequiredFields.map(field => field.label));
-      setModalVisible(true);
-    }
-  };
+  const {modalVisible, missingFields, checkAddress, setModalVisible} =
+    useCheckFields(user.user.id);
 
   useFocusEffect(
     useCallback(() => {
@@ -227,7 +144,7 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
             </View>
             <View style={[styles.row]}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('SettingsScreen')}
+                onPress={() => navigation.navigate('QRCodeScannerScreen')}
                 style={[
                   styles.cardServico,
                   {backgroundColor: themeColors.secondary},
@@ -240,10 +157,10 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                   />
                 </View>
                 <Text style={[styles.cardTextServico, typography.semiBold]}>
-                  Fidelidade
+                  Qr code
                 </Text>
                 <Text style={[styles.cardTextSmallServico, typography.light]}>
-                  Programa de pontos
+                  Scannear qr code do usuário
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -412,6 +329,7 @@ const styles = StyleSheet.create({
   cardTextSmallServico: {
     fontSize: 14,
     color: '#fff',
+    textAlign: 'center',
   },
   roundedIconSearch: {
     borderRadius: 50,
