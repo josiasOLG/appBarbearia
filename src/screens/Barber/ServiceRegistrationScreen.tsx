@@ -15,6 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../styles/colors/Colors';
 import typography from '../../styles/typographys/typography';
 import CustomIcon from '../../components/atoms/Icon/Icon';
+import Select from '../../components/atoms/Select/Select';
 import {BarberService} from '../../api/BarberService';
 
 const ServiceRegistrationScreen: React.FC = () => {
@@ -25,10 +26,12 @@ const ServiceRegistrationScreen: React.FC = () => {
   const [serviceName, setServiceName] = useState('');
   const [points, setPoints] = useState('');
   const [services, setServices] = useState<any[]>([]);
+  const [availableServices, setAvailableServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchServices();
+    fetchAvailableServices();
   }, []);
 
   const fetchServices = async () => {
@@ -41,6 +44,16 @@ const ServiceRegistrationScreen: React.FC = () => {
       console.error('Failed to fetch services', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAvailableServices = async () => {
+    try {
+      const response = await BarberService.getAllServices();
+      console.log(response);
+      setAvailableServices(response.data);
+    } catch (error) {
+      console.error('Failed to fetch available services', error);
     }
   };
 
@@ -91,12 +104,16 @@ const ServiceRegistrationScreen: React.FC = () => {
             Serviços que você oferece para os seus consumidores
           </Text>
           <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Digite o nome do serviço"
-              placeholderTextColor="#aaa"
-              value={serviceName}
-              onChangeText={setServiceName}
+            <Select
+              items={availableServices.map(service => ({
+                label: service.name,
+                value: service.name,
+              }))}
+              selectedValue={serviceName}
+              onValueChange={setServiceName}
+              placeholder="Selecionar serviço"
+              themeColors={themeColors}
+              style={{width: 180}}
             />
             <TextInput
               style={styles.input}
@@ -174,7 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     color: '#fff',
     marginBottom: 10,
   },
@@ -187,7 +204,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
+    gap: 10,
   },
   input: {
     flex: 1,
@@ -195,7 +214,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     paddingHorizontal: 15,
-    fontSize: 16,
+    fontSize: 14,
     marginRight: 10,
   },
   addButton: {
@@ -223,7 +242,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   serviceText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#fff',
     textTransform: 'capitalize',
   },
@@ -233,7 +252,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 14,
     color: '#aaa',
     textAlign: 'center',
   },

@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   header: {
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 20,
   },
   profileContainer: {
@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileName: {
-    fontSize: 18,
     color: '#fff',
     textTransform: 'capitalize',
   },
@@ -201,7 +200,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   completionTitle: {
-    fontSize: 16,
+    fontSize: 14,
   },
   completionDescription: {
     fontSize: 14,

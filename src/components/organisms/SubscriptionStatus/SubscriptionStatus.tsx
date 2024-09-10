@@ -116,13 +116,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   header: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 10,
   },
   statusLabel: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     marginTop: 0,
     color: '#666',

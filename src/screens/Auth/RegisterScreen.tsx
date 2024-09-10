@@ -74,7 +74,7 @@ const RegisterScreen: React.FC = () => {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{name: 'LoginScreens'}],
+            routes: [{name: 'LoginScreen'}],
           }),
         );
       } catch (error) {
@@ -85,8 +85,8 @@ const RegisterScreen: React.FC = () => {
   };
 
   return (
-    <LinearGradient colors={['#7b67e9', '#624ed1']} style={styles.container}>
-      <StatusBar backgroundColor={'#624ed1'} />
+    <LinearGradient colors={['#333', '#333']} style={styles.container}>
+      <StatusBar backgroundColor={'#333'} />
       <Icon name="user" size={50} color="#fff" style={styles.icon} />
       <Text style={[styles.title, typography.bold]}>Cadastro de Usuário</Text>
       <Text style={[styles.subTitle, typography.light]}>
@@ -189,12 +189,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 16,
   },
   subTitle: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -206,8 +206,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     marginBottom: 10,
-    backgroundColor: '#6656bd',
-    color: '#fff',
+    backgroundColor: '#fff',
+    color: '#333',
     borderRadius: 5,
     paddingHorizontal: 10,
   },
@@ -219,13 +219,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   valid: {
-    color: '#0f0',
+    color: '#2abe2a',
   },
   invalid: {
-    color: '#fc7115',
+    color: '#cf1a1a',
   },
   button: {
-    backgroundColor: '#fc7115',
+    backgroundColor: '#333',
     borderWidth: 1,
     borderColor: 'transparent',
     borderRadius: 5,

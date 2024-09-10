@@ -38,8 +38,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <LinearGradient colors={['#7b67e9', '#624ed1']} style={styles.gradient}>
-        <StatusBar backgroundColor={'#7b67e9'} />
+      <LinearGradient colors={['#333', '#333']} style={styles.gradient}>
+        <StatusBar backgroundColor={'#333'} />
         <EcoIcon style={styles.iconBack} />
         <View style={styles.topSection}>
           <LottieView
@@ -66,7 +66,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({navigation}) => {
                 indicatorStyle={styles.tabIndicator}
                 style={styles.tabBar}
                 labelStyle={styles.tabLabel}
-                activeColor="#fc7115"
+                activeColor="#7b67e9"
                 inactiveColor="#fff"
                 onTabPress={({route}) => {
                   // Previne a ação padrão de arrastar para mudar de aba
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: fonts.body,
   },
   loginButton: {
-    backgroundColor: '#fc7115',
+    backgroundColor: '#7b67e9',
     padding: hp('2%'),
     borderRadius: wp('2.5%'),
     alignItems: 'center',

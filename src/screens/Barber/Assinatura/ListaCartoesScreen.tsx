@@ -21,6 +21,7 @@ import {getCards, subscribeUser} from '../../../api/SubscriptionService';
 import {useFocusEffect} from '@react-navigation/native';
 import CVCModal from './modal/CVCModal';
 import colors from '../../../styles/colors/Colors';
+import CustomIcon from '../../../components/atoms/Icon/Icon';
 
 const ListaCartoesScreen: React.FC = ({navigation}) => {
   const selectedPlan = useSelector(
@@ -109,32 +110,45 @@ const ListaCartoesScreen: React.FC = ({navigation}) => {
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.optionsContainer}>
-            {options.map((option, index) => (
-              <SelectableOption
-                key={option.id}
-                icon={option.icon}
-                text={option.text}
-                selected={selectedOption === index}
-                onPress={() => handleOptionSelect(index)}
+          <View style={styles.bottomButtonContainer}>
+            <TouchableOpacity
+              style={[styles.button, {backgroundColor: themeColors.primary}]}
+              onPress={screenCadCartao}>
+              <Text style={[styles.buttonTextLeft, typography.boldItalic]}>
+                Adicionar cartão
+              </Text>
+              <CustomIcon
+                name="plus"
+                color="#fff"
+                size={20}
+                type="feather"
+                style={[styles.buttonTextRight, typography.extraLightItalic]}
               />
-            ))}
+            </TouchableOpacity>
           </View>
-          <IconButton
-            onPress={screenCadCartao}
-            text="Adicionar cartão"
-            iconName="plus"
-          />
-
-          <View style={styles.contentTextoSelecione}>
-            <Text style={[typography.bold, styles.contentTextoSelecioneTexto]}>
-              Selecione o cartão abaixo já cadastrado
-            </Text>
-            <Text
-              style={[typography.light, styles.contentTextoSelecioneTexto2]}>
-              E faça sua assinatura agora mesmo e ganhe desconto exclusivo
-            </Text>
-          </View>
+          {cards.length > 0 ? (
+            <View style={styles.contentTextoSelecione}>
+              <Text
+                style={[typography.bold, styles.contentTextoSelecioneTexto]}>
+                Selecione o cartão abaixo já cadastrado
+              </Text>
+              <Text
+                style={[typography.light, styles.contentTextoSelecioneTexto2]}>
+                E faça sua assinatura agora mesmo e ganhe desconto exclusivo
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.contentTextoSelecione}>
+              <Text
+                style={[typography.bold, styles.contentTextoSelecioneTexto]}>
+                Nenhum cartão cadastrado
+              </Text>
+              <Text
+                style={[typography.light, styles.contentTextoSelecioneTexto2]}>
+                Cadastre um cartão para continuar
+              </Text>
+            </View>
+          )}
           <CardList
             cards={cards.map((card, index) => ({
               ...card,
@@ -143,19 +157,27 @@ const ListaCartoesScreen: React.FC = ({navigation}) => {
             onCardSelect={handleCardSelect}
             onCardSelectItem={handleCardSelectItem}
           />
+          <View style={styles.bottomButtonContainer}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                {
+                  backgroundColor: themeColors.primary,
+                  opacity: selectedCardItem ? 1 : 0.5,
+                },
+              ]}
+              onPress={() => selectedCardItem && setModalVisible(true)}
+              disabled={!selectedCardItem}>
+              <Text style={[styles.buttonTextLeft, typography.boldItalic]}>
+                Realizar assinatura
+              </Text>
+              <Text
+                style={[styles.buttonTextRight, typography.extraLightItalic]}>
+                {selectedPlan.description}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
-        <View style={styles.bottomButtonContainer}>
-          <TouchableOpacity
-            style={[styles.button, {backgroundColor: themeColors.primary}]}
-            onPress={() => setModalVisible(true)}>
-            <Text style={[styles.buttonTextLeft, typography.boldItalic]}>
-              Assinatura
-            </Text>
-            <Text style={[styles.buttonTextRight, typography.extraLightItalic]}>
-              {selectedPlan.description}
-            </Text>
-          </TouchableOpacity>
-        </View>
       </KeyboardAvoidingView>
       <CVCModal
         onClose={() => setModalVisible(false)}
@@ -174,9 +196,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContainer: {
-    flexGrow: 1,
     padding: 16,
-    paddingBottom: 80,
   },
   optionsContainer: {
     flexDirection: 'row',
@@ -191,11 +211,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#4231a4',
   },
   bottomButtonContainer: {
-    position: 'absolute',
-    bottom: 16,
-    left: 0,
-    right: 0,
-    padding: 16,
+    flex: 1,
+    width: '100%',
+    marginTop: 0,
   },
   button: {
     flexDirection: 'row',
@@ -208,21 +226,21 @@ const styles = StyleSheet.create({
   },
   buttonTextLeft: {
     flex: 1,
-    fontSize: 18,
+
     color: '#fff',
     textAlign: 'left',
   },
   buttonTextRight: {
     flex: 1,
-    fontSize: 18,
     color: '#fff',
     textAlign: 'right',
   },
   contentTextoSelecione: {
-    paddingTop: 20,
+    paddingVertical: 20,
+    alignItems: 'center',
   },
   contentTextoSelecioneTexto: {
-    fontSize: 16,
+    fontSize: 14,
   },
   contentTextoSelecioneTexto2: {
     fontSize: 14,

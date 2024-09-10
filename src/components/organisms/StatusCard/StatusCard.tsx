@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     marginVertical: 5,
     color: '#333',
     textTransform: 'capitalize',

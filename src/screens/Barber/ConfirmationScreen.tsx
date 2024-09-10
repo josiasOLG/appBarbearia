@@ -46,7 +46,20 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
         user.user.id,
         filter,
       );
-      setServices(response);
+      const filteredAppointments = response.filter(appointment => {
+        const appointmentDate = new Date(appointment.date);
+        const appointmentTime = appointment.time.split(':');
+        appointmentDate.setHours(
+          parseInt(appointmentTime[0]),
+          parseInt(appointmentTime[1]),
+        );
+
+        const now = new Date();
+
+        return appointmentDate > now;
+      });
+      console.log(filteredAppointments);
+      setServices(filteredAppointments);
     } catch (error) {
       console.error('Failed to fetch appointments:', error);
     } finally {
@@ -195,13 +208,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     color: '#fff',
     marginBottom: 10,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#fff',
     marginBottom: 20,
     textAlign: 'center',

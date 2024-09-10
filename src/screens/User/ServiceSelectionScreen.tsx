@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 20,
     textAlign: 'center',
     color: '#fff',
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   serviceTitle: {
-    fontSize: 18,
     textAlign: 'left',
   },
   serviceDescription: {
@@ -199,13 +198,13 @@ const styles = StyleSheet.create({
   },
   buttonTextLeft: {
     flex: 1,
-    fontSize: 18,
+
     color: '#fff',
     textAlign: 'left',
   },
   buttonTextRight: {
     flex: 1,
-    fontSize: 18,
+
     color: '#fff',
     textAlign: 'right',
   },

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   value: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 5,
   },
   icon: {

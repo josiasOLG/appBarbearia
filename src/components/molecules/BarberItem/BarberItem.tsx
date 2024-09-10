@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 15,
     paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingVertical: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   cardTextBarber: {
     color: '#12182e',
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 5,
   },
   cardTextSmallBarber: {

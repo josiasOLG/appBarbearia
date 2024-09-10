@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cardExpiry: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#fff',
     flex: 1,
     textAlign: 'left',

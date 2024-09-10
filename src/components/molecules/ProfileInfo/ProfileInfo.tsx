@@ -64,13 +64,13 @@ const styles = StyleSheet.create({
   },
   name: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,
   },
   description: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 14,
     color: '#fff',
     textAlign: 'left',
   },

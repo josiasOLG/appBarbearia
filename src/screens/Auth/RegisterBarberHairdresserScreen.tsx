@@ -76,7 +76,7 @@ const RegisterBarberHairdresserScreen: React.FC = () => {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{name: 'LoginScreens'}],
+            routes: [{name: 'LoginScreen'}],
           }),
         );
       } catch (error) {
@@ -93,9 +93,9 @@ const RegisterBarberHairdresserScreen: React.FC = () => {
 
   return (
     <LinearGradient
-      colors={[colors.user.primary, colors.user.secondary]}
+      colors={[colors.user.black, colors.user.black]}
       style={styles.container}>
-      <StatusBar backgroundColor={colors.user.primary} />
+      <StatusBar backgroundColor={colors.user.black} />
       <Text style={[styles.title, typography.bold]}>
         Cadastro de empresário(a)
       </Text>
@@ -123,14 +123,14 @@ const RegisterBarberHairdresserScreen: React.FC = () => {
       <TextInput
         style={styles.input}
         placeholder="Nome completo"
-        placeholderTextColor="#fff"
+        placeholderTextColor="#333"
         value={name}
         onChangeText={setName}
       />
       <TextInput
         style={styles.input}
         placeholder="Email"
-        placeholderTextColor="#fff"
+        placeholderTextColor="#333"
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
@@ -138,7 +138,7 @@ const RegisterBarberHairdresserScreen: React.FC = () => {
       <TextInput
         style={styles.input}
         placeholder="Senha"
-        placeholderTextColor="#fff"
+        placeholderTextColor="#333"
         secureTextEntry
         value={password}
         onChangeText={handlePasswordChange}
@@ -180,7 +180,7 @@ const RegisterBarberHairdresserScreen: React.FC = () => {
       <TextInput
         style={styles.input}
         placeholder="Confirmar Senha"
-        placeholderTextColor="#fff"
+        placeholderTextColor="#333"
         secureTextEntry
         value={confirmPassword}
         onChangeText={handleConfirmPasswordChange}
@@ -217,12 +217,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 16,
   },
   subTitle: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -234,8 +234,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     marginBottom: 10,
-    backgroundColor: colors.user.primary, // Verde mais escuro
-    color: '#fff',
+    backgroundColor: colors.user.white, // Verde mais escuro
+    color: '#333',
     borderRadius: 5,
     paddingHorizontal: 10,
   },
@@ -247,10 +247,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   valid: {
-    color: '#0f0',
+    color: '#1cdf1c',
   },
   invalid: {
-    color: '#fc7115',
+    color: '#df1c1c',
   },
   button: {
     backgroundColor: '#000000', // Preto
@@ -282,13 +282,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   roleButtonActive: {
-    backgroundColor: '#fc7115',
+    backgroundColor: '#4231a4',
     color: '#000',
-    borderColor: '#fc7115',
+    borderColor: '#4231a4',
   },
   roleButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
   },
 });
 

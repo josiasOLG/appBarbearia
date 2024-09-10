@@ -18,6 +18,7 @@ import FormPerfil from '../../components/organisms/FormPerfil/FormPerfil';
 import LoadingModal from '../../components/organisms/LoadingModal/LoadingModal';
 import {updateProfile} from '../../store/reducers/user.reducer';
 import {showLoading, hideLoading} from '../../store/reducers/loading.reducer';
+import Toast from 'react-native-toast-message';
 
 const ProfileScreen: React.FC = () => {
   const dispatch = useDispatch();
@@ -144,14 +145,6 @@ const ProfileScreen: React.FC = () => {
             onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>Salvar</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
-            style={[
-              styles.submitButton,
-              {backgroundColor: themeColors.primary, marginTop: 10},
-            ]}
-            onPress={handleImageUpload}>
-            <Text style={styles.submitButtonText}>Upload Imagem</Text>
-          </TouchableOpacity> */}
         </View>
       </ScrollView>
       {loading && <LoadingModal />}
@@ -179,7 +172,6 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: '#fff',
-    fontSize: 18,
   },
 });
 

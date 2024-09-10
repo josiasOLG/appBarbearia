@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Commit with Jira",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "commit", "--", "${input:jiraCards}"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "detail": "Tarefa para fazer commit com os cards do Jira"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "jiraCards",
+      "type": "promptString",
+      "description": "Digite os cards do Jira separados por espaço (ex: PROJ-123 PROJ-456)"
+    }
+  ]
+}

@@ -28,12 +28,14 @@ import AppointmentDetailsScreen from '../screens/User/AppointmentDetailsScreen';
 import FidelityScreen from '../screens/User/FidelityScreen';
 import FidelityDetailScreen from '../screens/User/FidelityDetailScreen';
 import QRCodeScreen from '../screens/User/QRCodeScreen';
+import BiometricScreen from '../screens/base/BiometricScreen';
+import NotificationScreen from '../screens/base/NotificationScreen';
+import SecurityScreen from '../screens/base/SecurityItem';
 
 const UserStack = createStackNavigator();
 
 export const UserStackNavigator = () => {
   const user = useSelector((state: any) => state.user);
-  const service = useSelector((state: any) => state.service);
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
 
@@ -43,6 +45,11 @@ export const UserStackNavigator = () => {
         name="HomeScreen"
         options={{...noHeaderOption, ...hiddenBackButtonOption}}
         component={HomeScreen}
+      />
+      <UserStack.Screen
+        name="BiometricScreen"
+        component={BiometricScreen}
+        initialParams={{userType: user.type}}
       />
       <UserStack.Screen
         name="SettingsScreen"
@@ -142,7 +149,7 @@ export const UserStackNavigator = () => {
         name="FidelityScreen"
         component={FidelityScreen}
         options={{
-          headerTitle: '',
+          headerTitle: 'Fidelidade',
           headerStyle: [
             styles.headerTransparent,
             {backgroundColor: themeColors.secondary},
@@ -155,7 +162,7 @@ export const UserStackNavigator = () => {
         name="FidelityDetailScreen"
         component={FidelityDetailScreen}
         options={{
-          headerTitle: '',
+          headerTitle: 'Fidelidade',
           headerStyle: [
             styles.headerTransparent,
             {backgroundColor: themeColors.secondary},
@@ -179,49 +186,6 @@ export const UserStackNavigator = () => {
         }}
       />
 
-      <UserStack.Screen
-        name="AssinaturaScreen"
-        component={AssinaturaScreen}
-        options={{
-          headerTitle: 'Assinaturas',
-          headerStyle: [
-            styles.headerTransparent,
-            {backgroundColor: themeColors.primary},
-          ],
-          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
-          headerTintColor: '#fff',
-        }}
-      />
-      <UserStack.Screen
-        name="ListaCartoesScreen"
-        component={ListaCartoesScreen}
-        options={{
-          headerTitle: 'Assinaturas',
-          headerStyle: styles.headerWhite,
-          headerTitleStyle: [styles.headerTitle, typography.semiBold],
-          headerTintColor: '#333',
-        }}
-      />
-      <UserStack.Screen
-        name="AssinaturaStatus"
-        component={AssinaturaStatus}
-        options={{
-          headerTitle: 'Assinaturas',
-          headerStyle: styles.headerWhite,
-          headerTitleStyle: styles.headerTitle,
-          headerTintColor: '#333',
-        }}
-      />
-      <UserStack.Screen
-        name="CadastrarCartaoScreen"
-        component={CadastrarCartaoScreen}
-        options={{
-          headerTitle: 'Cadastrar cartão',
-          headerStyle: styles.headerWhite,
-          headerTitleStyle: [styles.headerTitle, typography.semiBold],
-          headerTintColor: '#333',
-        }}
-      />
       <UserStack.Screen
         name="CadastrarEnderecoScreen"
         component={CadastrarEnderecoScreen}
@@ -248,6 +212,32 @@ export const UserStackNavigator = () => {
           headerTintColor: '#333',
         }}
       />
+      <UserStack.Screen
+        name="NotificationScreen"
+        component={NotificationScreen}
+        options={{
+          headerTitle: 'Notificações',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.white},
+          ],
+          headerTitleStyle: [styles.headerTitle, typography.semiBold],
+          headerTintColor: '#333',
+        }}
+      />
+      <UserStack.Screen
+        name="SecurityScreen"
+        component={SecurityScreen}
+        options={{
+          headerTitle: 'Segurança',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
     </UserStack.Navigator>
   );
 };
@@ -264,12 +254,12 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#333',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   headerTitleWhite: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
 });

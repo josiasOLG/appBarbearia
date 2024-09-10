@@ -7,6 +7,8 @@ import typography from '../../styles/typographys/typography';
 import CustomIcon from '../../components/atoms/Icon/Icon';
 
 import Screen1 from '../../assets/images/screen.png';
+import Screen2 from '../../assets/images/screen2.png';
+import Screen3 from '../../assets/images/screen3.png';
 
 interface Slide {
   key: string;
@@ -19,23 +21,23 @@ interface Slide {
 const slides: Slide[] = [
   {
     key: 'one',
-    title: 'Seamless Flower Shopping Experience',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt',
+    title: 'Experiência Única em Barbearia',
+    text: 'Descubra a comodidade de agendar cortes e tratamentos exclusivos sem sair de casa.',
     image: Screen1,
     backgroundColor: '#fff',
   },
   {
     key: 'two',
-    title: 'Exclusive Services',
-    text: 'Discover a wide range of services - classic cut, handcrafted beard, and premium treatments',
-    image: Screen1,
+    title: 'Serviços Exclusivos',
+    text: 'Explore uma ampla gama de serviços: cortes clássicos, cuidados especiais com a barba e tratamentos premium.',
+    image: Screen2,
     backgroundColor: '#fff',
   },
   {
     key: 'three',
-    title: 'Book Your Appointment',
-    text: 'Choose your favorite barber, select the desired service, and book the best time for you.',
-    image: Screen1,
+    title: 'Agende Seu Horário',
+    text: 'Escolha seu barbeiro favorito, selecione o serviço desejado e reserve o melhor horário para você.',
+    image: Screen3,
     backgroundColor: '#fff',
   },
 ];
@@ -53,10 +55,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({navigation}) => {
         <Image source={item.image} style={styles.image} />
       </View>
       <View style={styles.textContainer}>
-        <Text style={[styles.title, typography.bold]}>
-          <Text style={styles.highlight}>Seamless </Text>
-          <Text>Flower Shopping Experience</Text>
-        </Text>
+        <Text style={[styles.title, typography.bold]}>{item.title}</Text>
         <Text style={[styles.text, typography.light]}>{item.text}</Text>
       </View>
     </View>
@@ -65,7 +64,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({navigation}) => {
   const onDone = async () => {
     try {
       await AsyncStorage.setItem('onboardingCompleted', 'true');
-      navigation.navigate('LoginScreens');
+      navigation.navigate('LoginScreen');
     } catch (error) {
       console.error('Error storing onboarding completion:', error);
     }
@@ -155,14 +154,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#333', // Default color for the rest of the title
     marginBottom: 10,
   },
   highlight: {
-    color: '#4231a4', // Highlight color
+    color: '#333', // Highlight color
   },
   text: {
     fontSize: 18,
@@ -178,7 +177,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   activeDotStyle: {
-    backgroundColor: '#4231a4',
+    backgroundColor: '#333',
     width: 8,
     height: 8,
     borderRadius: 4,
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
-    backgroundColor: '#4231a4',
+    backgroundColor: '#333',
   },
   buttonWrapperSkip: {
     paddingVertical: 10,
@@ -199,11 +198,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
   },
   buttonTextSkip: {
-    color: '#4231a4',
-    fontSize: 16,
+    color: '#333',
+    fontSize: 14,
   },
   iconBtnRight: {
     alignSelf: 'center',

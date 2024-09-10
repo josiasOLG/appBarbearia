@@ -22,9 +22,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   const themeColors = colors[userRole] || colors.user;
 
   return (
-    <TouchableOpacity
-      style={[styles.button, {backgroundColor: themeColors.secondary}]}
-      onPress={onPress}>
+    <TouchableOpacity style={[styles.button]} onPress={onPress}>
       {iconName && (
         <Icon name={iconName} size={20} color="#fff" style={styles.icon} />
       )}
@@ -38,17 +36,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#4231a4',
+    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 10,
     marginTop: 20,
     paddingVertical: 20,
+    width: '100%',
   },
   icon: {
     marginRight: 10,
   },
   text: {
-    color: '#fff',
+    color: '#333',
     fontSize: 20,
   },
 });

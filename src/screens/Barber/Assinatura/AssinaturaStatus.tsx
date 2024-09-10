@@ -1,4 +1,3 @@
-// screens/Barber/Assinatura/AssinaturaStatus.tsx
 import React, {useCallback, useState} from 'react';
 import {
   View,
@@ -7,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import {
   CommonActions,
@@ -24,6 +24,7 @@ import AssinaturaList from '../../../components/organisms/AssinaturaList/Assinat
 import typography from '../../../styles/typographys/typography';
 import SubscriptionStatus from '../../../components/organisms/SubscriptionStatus/SubscriptionStatus';
 import UpdateCardModal from '../../../components/molecules/UpdateCardModalProps/UpdateCardModalProps';
+import LoadingModal from '../../../components/organisms/LoadingModal/LoadingModal';
 
 const AssinaturaStatus: React.FC = () => {
   const navigation = useNavigation();
@@ -84,7 +85,7 @@ const AssinaturaStatus: React.FC = () => {
     }, [user]),
   );
 
-  const statusAtual = subscribers?.subscriptionStatus; // Exemplo de status atual
+  const statusAtual = subscribers?.subscriptionStatus;
 
   const handleActionPress = async (action: string) => {
     if (action === 'UpdateCardDetails') {
@@ -136,6 +137,7 @@ const AssinaturaStatus: React.FC = () => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor={'#fff'} />
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <SubscriptionStatus
             status={statusAtual}
@@ -156,6 +158,7 @@ const AssinaturaStatus: React.FC = () => {
           <AssinaturaList assinaturas={invoices} />
         </View>
       </KeyboardAvoidingView>
+      {loading && <LoadingModal />}
       {isModalVisible && (
         <UpdateCardModal
           visible={isModalVisible}
@@ -178,7 +181,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   historicoHeader: {
-    fontSize: 20,
     fontWeight: 'bold',
     marginTop: 0,
     marginBottom: 8,

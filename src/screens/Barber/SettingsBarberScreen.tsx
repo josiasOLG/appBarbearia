@@ -23,6 +23,7 @@ interface SettingsItemProps {
   onPress: () => void;
   icon: string;
   themeColors: any;
+  disabled: boolean;
 }
 
 const SettingsItem: React.FC<SettingsItemProps> = ({
@@ -31,8 +32,12 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
   icon,
   onPress,
   themeColors,
+  disabled,
 }) => (
-  <TouchableOpacity style={styles.settingsItem} onPress={onPress}>
+  <TouchableOpacity
+    style={[styles.settingsItem, {opacity: disabled ? 0.1 : 1}]}
+    onPress={onPress}
+    disabled={disabled}>
     <View
       style={[
         styles.roundedIconSettings,
@@ -41,7 +46,7 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
       <CustomIcon
         name={icon}
         color={themeColors.white}
-        size={10}
+        size={20}
         type="font-awesome"
       />
     </View>
@@ -71,8 +76,9 @@ const SettingsBarberScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
       id: '1',
       title: 'Notificações',
       description: 'Gerencie suas notificações',
-      screen: 'Notifications',
+      screen: 'NotificationScreen',
       icon: 'bell',
+      requiresActive: user.user.active,
     },
     {
       id: '2',
@@ -80,13 +86,15 @@ const SettingsBarberScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
       description: 'Veja e edite seu perfil',
       screen: 'ProfileScreen',
       icon: 'user',
+      requiresActive: true,
     },
     {
       id: '3',
       title: 'Segurança',
       description: 'Configurações de segurança',
-      screen: 'Security',
+      screen: 'SecurityScreen',
       icon: 'shield',
+      requiresActive: true,
     },
     {
       id: '4',
@@ -94,6 +102,23 @@ const SettingsBarberScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
       description: 'Gerencie seus endereços',
       screen: 'CadastrarEnderecoScreen',
       icon: 'map-marker',
+      requiresActive: true,
+    },
+    {
+      id: '5',
+      title: 'Assinatura',
+      description: 'Realizar o pagamento da assinatura',
+      screen: 'PixScreen',
+      icon: 'credit-card',
+      requiresActive: true,
+    },
+    {
+      id: '6',
+      title: 'Relatórios',
+      description: 'Pdfs de gerenciamento de dados',
+      screen: 'ReportScreen',
+      icon: 'dashboard',
+      requiresActive: user.user.active,
     },
   ];
 
@@ -112,7 +137,7 @@ const SettingsBarberScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: themeColors._claro}]}>
       <StatusBar
         backgroundColor={themeColors.primary}
         barStyle="dark-content"
@@ -141,6 +166,7 @@ const SettingsBarberScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
             icon={item.icon}
             onPress={() => handleSettingsPress(item.screen)}
             themeColors={themeColors}
+            disabled={!item.requiresActive}
           />
         )}
         contentContainerStyle={styles.flatListContent}
@@ -157,7 +183,7 @@ const SettingsBarberScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
             <CustomIcon
               name="sign-out"
               color={themeColors.white}
-              size={15}
+              size={20}
               type="font-awesome"
             />
           </View>
@@ -173,7 +199,6 @@ const SettingsBarberScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
   },
   header: {
     flexDirection: 'row',
@@ -221,7 +246,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   settingsItemTitle: {
-    fontSize: 16,
+    fontSize: 14,
   },
   settingsItemDescription: {
     fontSize: 14,
@@ -235,7 +260,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   planText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#666',
   },
   planViews: {
@@ -251,7 +276,7 @@ const styles = StyleSheet.create({
   },
   upgradeButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
   },
   logoutButton: {
     flexDirection: 'row',
@@ -260,7 +285,7 @@ const styles = StyleSheet.create({
   },
   logoutButtonText: {
     color: '#333',
-    fontSize: 16,
+    fontSize: 14,
     marginLeft: 10,
   },
 });

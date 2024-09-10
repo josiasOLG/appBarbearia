@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, ActivityIndicator} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -7,7 +13,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import FormField from '../../molecules/FormField/FormField';
 import IconButton from '../../atoms/Icon/IconButton';
 import {useNavigation} from '@react-navigation/native';
-import {getAddressByUserId, updateAddress} from '../../../api/AddressService';
+import {
+  getAddressByUserId,
+  getCep,
+  updateAddress,
+} from '../../../api/AddressService';
 import typography from '../../../styles/typographys/typography';
 import colors from '../../../styles/colors/Colors';
 import {
@@ -37,7 +47,10 @@ const schema = yup.object().shape({
   city: yup.string().required('Cidade é obrigatória'),
   state: yup.string().required('Estado é obrigatório'),
   country: yup.string().required('País é obrigatório'),
-  zipCode: yup.string().required('CEP é obrigatório'),
+  zipCode: yup
+    .string()
+    .required('CEP é obrigatório')
+    .matches(/^\d{5}-\d{3}$/, 'CEP inválido'),
   phoneNumber: yup.string().required('Telefone é obrigatório'),
   cpf: yup.string().required('CPF é obrigatório'),
 });
@@ -47,6 +60,7 @@ const EnderecoForm: React.FC = () => {
     control,
     handleSubmit,
     setValue,
+    getValues,
     formState: {errors},
   } = useForm<AddressFormData>({resolver: yupResolver(schema)});
   const navigation = useNavigation();
@@ -84,11 +98,40 @@ const EnderecoForm: React.FC = () => {
     fetchAddress();
   }, [user.user.id, setValue]);
 
+  const fetchCepAddress = async (cep: string) => {
+    try {
+      dispatch(showLoading('Buscando endereço...'));
+      // Remover traço do CEP
+      const cleanCep = cep.replace(/\D/g, '');
+      const addressData = await getCep(cleanCep);
+      console.log(addressData);
+      setValue('street', addressData.logradouro);
+      setValue('locality', addressData.bairro);
+      setValue('city', addressData.localidade);
+      setValue('state', addressData.uf);
+      setValue('country', 'Brasil');
+      dispatch(hideLoading());
+    } catch (error) {
+      console.log(error);
+      dispatch(hideLoading());
+    }
+  };
+
+  const handleCepSearch = () => {
+    const cep = getValues('zipCode');
+    if (cep && cep.length === 9) {
+      fetchCepAddress(cep);
+    } else {
+      console.log('CEP inválido');
+    }
+  };
+
   const handleRegister: SubmitHandler<AddressFormData> = async data => {
     dispatch(showLoading('Cadastrando endereço...'));
     try {
       await updateAddress(user.user.id, data);
       dispatch(hideLoading());
+      navigation.goBack(); // Redirecionar o usuário após o cadastro
     } catch (error: any) {
       console.log(error);
       dispatch(hideLoading());
@@ -163,6 +206,18 @@ const EnderecoForm: React.FC = () => {
             inputStyle={styles.input}
             labelStyle={styles.label}
           />
+        </View>
+        <View style={styles.cardSmall}>
+          <TouchableOpacity
+            style={[
+              styles.buttonCep,
+              {
+                backgroundColor: themeColors.primary,
+              },
+            ]}
+            onPress={handleCepSearch}>
+            <Text style={styles.buttonCepText}>Buscar CEP</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.row}>
@@ -296,6 +351,7 @@ const EnderecoForm: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 0,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -305,7 +361,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 5,
+    marginBottom: 15,
   },
   cardSmall: {
     flex: 1,
@@ -325,7 +381,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-    marginVertical: 16,
+    marginVertical: 0,
     backgroundColor: '#fff',
     borderRadius: 15,
   },
@@ -348,6 +404,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#6e6e6e',
     ...typography.light,
+  },
+  buttonCep: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#6e6e6e',
+    borderRadius: 10,
+    marginTop: 23,
+    height: 50,
+  },
+  buttonCepText: {
+    color: '#fff',
+    fontSize: 13,
+    ...typography.regular,
   },
 });
 

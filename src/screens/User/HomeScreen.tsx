@@ -54,11 +54,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
           setHasSubscription(false);
         } catch (error) {
           console.error('Error fetching subscribers:', error);
+          setHasSubscription(false);
         } finally {
           setLoading(false);
         }
       };
-
       fetchSubscribers();
     }, [user]),
   );
@@ -91,7 +91,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                   name="grid"
                   color={'#ffffff'}
                   type="feather"
-                  size={10}
+                  size={20}
                 />
               </TouchableOpacity>
             </View>
@@ -99,8 +99,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
           <View style={[styles.middleSection]}>
             <TouchableOpacity
               onPress={() => navigation.navigate('BarberListScreen')}>
-              <View
-                style={[styles.card, {backgroundColor: themeColors.secondary}]}>
+              <View style={[styles.card, {backgroundColor: themeColors.white}]}>
                 <View style={styles.colum1}>
                   <Text style={[styles.cardTitle, typography.semiBold]}>
                     Favoritos
@@ -127,7 +126,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               <TouchableOpacity
                 style={[
                   styles.cardServico,
-                  {backgroundColor: themeColors.secondary},
+                  {backgroundColor: themeColors.white},
                 ]}
                 onPress={() => navigation.navigate('BarberListScreen')}>
                 <View
@@ -152,7 +151,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               <TouchableOpacity
                 style={[
                   styles.cardServico,
-                  {backgroundColor: themeColors.secondary},
+                  {backgroundColor: themeColors.white},
                 ]}
                 onPress={() => navigation.navigate('StatusListScreen')}>
                 <View
@@ -175,45 +174,37 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               </TouchableOpacity>
             </View>
             <View style={[styles.row]}>
-              {loading ? (
-                <></>
-              ) : (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate(
-                      hasSubscription ? 'AssinaturaStatus' : 'AssinaturaScreen',
-                    )
-                  }
+              <TouchableOpacity
+                onPress={() => navigation.navigate('FidelityScreen')}
+                style={[
+                  styles.cardServico,
+                  {backgroundColor: themeColors.white},
+                ]}>
+                <View
                   style={[
-                    styles.cardServico,
-                    {backgroundColor: themeColors.secondary},
+                    styles.roundedIcon,
+                    {backgroundColor: themeColors.primary},
                   ]}>
-                  <View
-                    style={[
-                      styles.roundedIcon,
-                      {backgroundColor: themeColors.primary},
-                    ]}>
-                    <IconPromotion
-                      width={40}
-                      height={40}
-                      color={themeColors.primary}
-                    />
-                  </View>
-                  <Text style={[styles.cardTextServico, typography.semiBold]}>
-                    {hasSubscription ? 'Ver Assinatura' : 'Assinatura'}
-                  </Text>
-                  <Text style={[styles.cardTextSmallServico, typography.light]}>
-                    {hasSubscription
-                      ? 'Gerir sua assinatura'
-                      : 'Criar assinatura'}
-                  </Text>
-                </TouchableOpacity>
-              )}
+                  <CustomIcon
+                    size={50}
+                    name="star"
+                    type="font-awesome"
+                    color={themeColors.white}
+                  />
+                </View>
+                <Text style={[styles.cardTextServico, typography.semiBold]}>
+                  Pontos fidelidade
+                </Text>
+                <Text style={[styles.cardTextSmallServico, typography.light]}>
+                  Gerencie seus pontos
+                </Text>
+              </TouchableOpacity>
+
               <TouchableOpacity
                 onPress={() => navigation.navigate('SettingsScreen')}
                 style={[
                   styles.cardServico,
-                  {backgroundColor: themeColors.secondary},
+                  {backgroundColor: themeColors.white},
                 ]}>
                 <View
                   style={[
@@ -275,7 +266,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#5350d3',
     borderRadius: 15,
-    padding: 0,
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -305,21 +296,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topSection: {
-    flex: 0.5,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    width: '100%',
+    flex: 0,
     paddingHorizontal: 20,
+    paddingTop: 40,
   },
   middleSection: {
-    flex: 0.1,
-    width: '100%',
+    flex: 0,
     paddingHorizontal: 20,
     paddingTop: 20,
   },
   bottomSection: {
-    flex: 3,
-    padding: 20,
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   contentTextTop: {
     flex: 1,
@@ -338,37 +327,39 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     marginTop: 20,
     borderRadius: 10,
-    fontSize: 20,
+
     padding: 20,
   },
   titleTop: {
     color: '#fff',
-    fontSize: 20,
+
     marginBottom: 5,
   },
   textTop: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 14,
   },
   cardTitle: {
-    color: '#fff',
-    fontSize: 20,
+    color: '#333',
     marginBottom: 0,
   },
   cardText: {
-    color: '#fff',
-    fontSize: 16,
+    color: '#333',
+    fontSize: 14,
     marginTop: 8,
   },
   cardTextServico: {
-    color: '#fff',
-    fontSize: 18,
+    color: '#333',
+    fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
   },
   cardTextSmallServico: {
-    fontSize: 14,
-    color: '#fff',
+    fontSize: 12,
+    color: '#333',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   roundedIconSearch: {
     borderRadius: 50,
@@ -381,11 +372,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   roundedIcon: {
-    borderRadius: 50,
-    backgroundColor: '#7a75d9',
-    padding: 40,
-    width: 50,
-    height: 50,
+    borderRadius: 100,
+    padding: 0,
+    width: 100,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },

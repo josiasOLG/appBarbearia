@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerTitle: {
-    fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
     textTransform: 'capitalize',
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
   },
   infoButtonText: {
     color: '#333',
-    fontSize: 16,
+    fontSize: 14,
   },
   loadingContainer: {
     flex: 1,

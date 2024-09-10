@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   modalButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
   },
 });
 

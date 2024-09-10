@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Commit Script",
+      "program": "${workspaceFolder}/src/index.ts",
+      "args": ["${input:jiraCards}", "${input:commitMessage}"],
+      "preLaunchTask": "Commit with Jira",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "console": "integratedTerminal"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "jiraCards",
+      "type": "promptString",
+      "description": "Digite os cards do Jira separados por espaço (ex: PROJ-123 PROJ-456)"
+    },
+    {
+      "id": "commitMessage",
+      "type": "promptString",
+      "description": "Digite a mensagem de commit"
+    }
+  ]
+}

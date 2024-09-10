@@ -14,12 +14,15 @@ import IconConfig from '../../assets/icons/iconConfig.svg';
 import LinearGradient from 'react-native-linear-gradient';
 import {GlobalLayoutStyles} from '../../styles/GlobalLayoutStyles';
 import typography from '../../styles/typographys/typography';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../styles/colors/Colors';
 import CustomIcon from '../../components/atoms/Icon/Icon';
 import CustomModal from '../../components/atoms/CustomModal/CustomModal';
 import {useFocusEffect} from '@react-navigation/native';
 import useCheckFields from '../../hooks/useCheckFields'; // Atualize o caminho conforme necessário
+import {UserService} from '../../api/UserService';
+import {updateProfile} from '../../store/reducers/user.reducer';
+import {Platform} from 'react-native';
 
 interface HomeScreenProps {
   navigation: any;
@@ -29,14 +32,25 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const user = useSelector((state: any) => state.user);
   const userRole = user?.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
-
   const {modalVisible, missingFields, checkAddress, setModalVisible} =
     useCheckFields(user.user.id);
+  const dispatch = useDispatch();
+
+  const checkUserActive = async (userData: any) => {
+    try {
+      const response = await UserService.getActive(userData.user.id);
+      const isActive = response.data.active;
+      dispatch(updateProfile({active: isActive}));
+    } catch (error) {
+      console.error('Error fetching user active status:', error);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
       checkAddress();
-    }, [checkAddress]),
+      checkUserActive(user);
+    }, [checkAddress, checkUserActive]),
   );
 
   const handleGoToAddress = () => {
@@ -56,7 +70,7 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
       <StatusBar backgroundColor={themeColors.primary} />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={GlobalLayoutStyles.flexContainer}>
+        style={styles.gradient}>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
           <View style={[styles.topSection]}>
             <View style={styles.contentTextTop}>
@@ -69,8 +83,7 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
           <View style={[styles.middleSection]}>
             <TouchableOpacity
               onPress={() => navigation.navigate('ServiceRegistrationScreen')}>
-              <View
-                style={[styles.card, {backgroundColor: themeColors.secondary}]}>
+              <View style={[styles.card, {backgroundColor: themeColors.white}]}>
                 <View style={styles.colum1}>
                   <Text style={[styles.cardTitle, typography.semiBold]}>
                     Serviços
@@ -104,30 +117,43 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               <TouchableOpacity
                 style={[
                   styles.cardServico,
-                  {backgroundColor: themeColors.secondary},
-                ]}>
-                <View style={styles.roundedIcon}>
-                  <IconCalendar
-                    width={40}
-                    height={40}
-                    color={themeColors.primary}
-                  />
+                  {
+                    backgroundColor: themeColors.white,
+                    opacity: user.user.active ? 1 : 0.4,
+                  },
+                ]}
+                disabled={!user.user.active}
+                onPress={() => navigation.navigate('FeedbackScreen')}>
+                <View
+                  style={[
+                    styles.roundedIcon,
+                    {backgroundColor: themeColors.primary},
+                  ]}>
+                  <IconCalendar width={40} height={40} color={'#333'} />
                 </View>
                 <Text style={[styles.cardTextServico, typography.semiBold]}>
-                  Relatórios
+                  Feedback
                 </Text>
                 <Text style={[styles.cardTextSmallServico, typography.light]}>
-                  Dados dos clientes
+                  Coleta e análise de feedback dos clientes
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={[
                   styles.cardServico,
-                  {backgroundColor: themeColors.secondary},
+                  {
+                    backgroundColor: themeColors.white,
+                    opacity: user.user.active ? 1 : 0.4,
+                  },
                 ]}
-                onPress={() => navigation.navigate('ConfirmationScreen')}>
-                <View style={styles.roundedIcon}>
+                onPress={() => navigation.navigate('ConfirmationScreen')}
+                disabled={!user.user.active}>
+                <View
+                  style={[
+                    styles.roundedIcon,
+                    {backgroundColor: themeColors.primary},
+                  ]}>
                   <IconCheckList
                     width={40}
                     height={40}
@@ -135,10 +161,10 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                   />
                 </View>
                 <Text style={[styles.cardTextServico, typography.semiBold]}>
-                  Status
+                  Agendamentos
                 </Text>
                 <Text style={[styles.cardTextSmallServico, typography.light]}>
-                  Agendamento
+                  Visualização e gestão dos horários
                 </Text>
               </TouchableOpacity>
             </View>
@@ -147,33 +173,46 @@ const BarberHomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
                 onPress={() => navigation.navigate('QRCodeScannerScreen')}
                 style={[
                   styles.cardServico,
-                  {backgroundColor: themeColors.secondary},
-                ]}>
-                <View style={styles.roundedIcon}>
-                  <IconConfig
-                    width={40}
-                    height={40}
-                    color={themeColors.primary}
+                  {
+                    backgroundColor: themeColors.white,
+                    opacity: user.user.active ? 1 : 0.4,
+                  },
+                ]}
+                disabled={!user.user.active}>
+                <View
+                  style={[
+                    styles.roundedIcon,
+                    {backgroundColor: themeColors.primary},
+                  ]}>
+                  <CustomIcon
+                    color={'#fff'}
+                    size={60}
+                    name="qrcode"
+                    type="font-awesome"
                   />
                 </View>
                 <Text style={[styles.cardTextServico, typography.semiBold]}>
-                  Qr code
+                  Codigo
                 </Text>
                 <Text style={[styles.cardTextSmallServico, typography.light]}>
-                  Scannear qr code do usuário
+                  Scannear codigo do usuário
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => navigation.navigate('SettingsBarberScreen')}
                 style={[
                   styles.cardServico,
-                  {backgroundColor: themeColors.secondary},
+                  {backgroundColor: themeColors.white},
                 ]}>
-                <View style={styles.roundedIcon}>
+                <View
+                  style={[
+                    styles.roundedIcon,
+                    {backgroundColor: themeColors.primary},
+                  ]}>
                   <IconConfig
                     width={40}
                     height={40}
-                    color={themeColors.primary}
+                    color={themeColors.black}
                   />
                 </View>
                 <Text style={[styles.cardTextServico, typography.semiBold]}>
@@ -218,7 +257,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     height: 100,
-    backgroundColor: '',
+    backgroundColor: '#5350d3',
     borderRadius: 15,
     padding: 16,
     shadowColor: '#000',
@@ -240,9 +279,9 @@ const styles = StyleSheet.create({
     width: '48%', // Aproximadamente metade da largura do contêiner, considerando a margem
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '',
+    backgroundColor: '#5350d3',
     borderRadius: 15,
-    padding: 0,
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -272,25 +311,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topSection: {
-    flex: 0.5,
-    justifyContent: 'flex-start',
-    width: '100%',
+    flex: 0,
     paddingHorizontal: 20,
+    paddingTop: 40,
   },
   middleSection: {
-    flex: 0.1,
-    width: '100%',
+    flex: 0,
     paddingHorizontal: 20,
     paddingTop: 20,
   },
   bottomSection: {
-    flex: 3,
-    padding: 20,
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   contentTextTop: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
+  },
+  contentTextTopRight: {
+    flex: 0.1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    marginTop: 20,
   },
   input: {
     height: 60,
@@ -298,42 +342,43 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     marginTop: 20,
     borderRadius: 10,
-    fontSize: 20,
+
     padding: 20,
   },
   titleTop: {
     color: '#fff',
-    fontSize: 20,
+
     marginBottom: 5,
   },
   textTop: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 14,
   },
   cardTitle: {
-    color: '#fff',
-    fontSize: 20,
+    color: '#333',
     marginBottom: 0,
   },
   cardText: {
-    color: '#fff',
-    fontSize: 16,
+    color: '#333',
+    fontSize: 14,
     marginTop: 8,
   },
   cardTextServico: {
-    color: '#fff',
-    fontSize: 18,
+    color: '#333',
+    fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
   },
   cardTextSmallServico: {
-    fontSize: 14,
-    color: '#fff',
+    fontSize: 12,
+    color: '#333',
     textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   roundedIconSearch: {
     borderRadius: 50,
-    backgroundColor: '',
+    backgroundColor: '#7a71e8',
     padding: 10,
     width: 50,
     height: 50,
@@ -342,11 +387,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   roundedIcon: {
-    borderRadius: 50,
-    backgroundColor: '',
-    padding: 40,
-    width: 50,
-    height: 50,
+    borderRadius: 100,
+    padding: 0,
+    width: 100,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },

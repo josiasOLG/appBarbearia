@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {NativeModules} from 'react-native'; // Importar NativeModules
 import {useSelector, useDispatch} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
@@ -11,6 +12,11 @@ const AppWrapper: React.FC = () => {
   const isLoading = useSelector((state: any) => state.loading.isLoading);
   const loadingMessage = useSelector((state: any) => state.loading.message);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Chamar o método nativo para esconder a splash screen
+    NativeModules.SplashScreen.hide();
+  }, []);
 
   return (
     <>

@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   headerTitle: {
-    fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
   },
@@ -174,13 +173,13 @@ const styles = StyleSheet.create({
   },
   buttonTextLeft: {
     flex: 1,
-    fontSize: 18,
+
     color: '#fff',
     textAlign: 'left',
   },
   buttonTextRight: {
     flex: 1,
-    fontSize: 18,
+
     color: '#fff',
     textAlign: 'right',
   },

@@ -138,12 +138,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,
   },
   subHeaderText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#666',
     textAlign: 'center',
     marginTop: 5,

@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 5,
   },
   description: {

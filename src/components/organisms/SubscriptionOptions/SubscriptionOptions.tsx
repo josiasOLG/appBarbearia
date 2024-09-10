@@ -19,7 +19,7 @@ const SubscriptionOptions: React.FC<SubscriptionOptionsProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.row}>
       {options.map(option => (
         <SubscriptionCard
           key={option.id}
@@ -35,7 +35,9 @@ const SubscriptionOptions: React.FC<SubscriptionOptionsProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginVertical: 10,
   },
 });

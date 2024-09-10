@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   serviceText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
   serviceSubText: {

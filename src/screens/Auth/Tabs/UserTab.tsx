@@ -94,8 +94,15 @@ const UserTab: React.FC<any> = () => {
           response.headers['access-token'],
         );
 
-        const {userId, username, descricao, certificacoes, image, email} =
-          response.data;
+        const {
+          userId,
+          username,
+          descricao,
+          certificacoes,
+          image,
+          email,
+          active,
+        } = response.data;
 
         dispatch(
           setUser({
@@ -107,6 +114,7 @@ const UserTab: React.FC<any> = () => {
             image: image || '',
             isLoggedIn: true,
             type: 'BARBER',
+            active: active,
           }),
         );
         navigation.navigate('ServiceSelectionScreen');
@@ -163,6 +171,7 @@ const UserTab: React.FC<any> = () => {
         descricao,
         certificacoes,
         image,
+        active,
       } = response.data;
 
       await Keychain.setGenericPassword(
@@ -187,6 +196,7 @@ const UserTab: React.FC<any> = () => {
           isLoggedIn: true,
           type: role,
           image: image,
+          active: active,
         }),
       );
 
@@ -287,6 +297,8 @@ const UserTab: React.FC<any> = () => {
           onChangeInput={setModalInput}
           onClose={() => setShowModal(false)}
           onSubmit={handleModalSubmit}
+          submitButtonText="Enviar"
+          closeButtonText="Fechar"
         />
       </View>
     </>
@@ -323,7 +335,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   loginButton: {
-    backgroundColor: '#fc7115',
+    backgroundColor: '#7b67e9',
     padding: hp('2%'),
     borderRadius: wp('2.5%'),
     alignItems: 'center',

@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#333',
   },

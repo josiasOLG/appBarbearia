@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Define o alvo da compilação para uma versão recente do JavaScript.
+    "module": "CommonJS", // Usado para suportar o padrão de módulos do Node.js (CommonJS).
+    "rootDir": "./src", // Define o diretório raiz do código fonte TypeScript.
+    "outDir": "./dist", // Define o diretório de saída para os arquivos JavaScript compilados.
+    "strict": true, // Habilita todas as verificações estritas do TypeScript.
+    "esModuleInterop": true, // Permite compatibilidade com importação de módulos do estilo ES6.
+    "forceConsistentCasingInFileNames": true, // Força o uso consistente de letras maiúsculas/minúsculas em nomes de arquivos.
+    "skipLibCheck": true, // Pula a verificação dos arquivos de declaração .d.ts para bibliotecas.
+    "moduleResolution": "node", // Resolve os módulos de acordo com a estrutura de módulos do Node.js.
+    "resolveJsonModule": true, // Permite a importação de arquivos .json.
+    "noImplicitAny": true, // Exige tipagem explícita para variáveis do tipo `any`.
+    "strictNullChecks": true, // Verifica nulidade de forma mais rigorosa.
+    "baseUrl": ".", // Define a raiz para a resolução de módulos.
+    "paths": {
+      // Permite a configuração de alias para módulos, se necessário.
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*"], // Inclui todos os arquivos TypeScript no diretório `src`.
+  "exclude": ["node_modules", "dist"] // Exclui a pasta `node_modules` e a pasta de saída `dist`.
+}

@@ -131,12 +131,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   titleScreen: {
-    fontSize: 32,
+    fontSize: 18,
     color: '#12182e',
-    marginBottom: 10,
+    marginBottom: 0,
   },
   subtitleScreen: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#12182e',
     marginBottom: 20,
     lineHeight: 25,

@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import CustomModal from '../../components/atoms/CustomModal/CustomModal';
 import typography from '../../styles/typographys/typography';
@@ -29,6 +28,14 @@ const QRCodeScreen: React.FC = () => {
     navigation.navigate('HomeScreen');
   };
 
+  const formatQRCode = (code: string) => {
+    return code.split('').map((char, index) => (
+      <Text key={index} style={styles.qrChar}>
+        {char}
+      </Text>
+    ));
+  };
+
   return (
     <View style={[styles.container, {backgroundColor: themeColors.secondary}]}>
       <View style={styles.containerBody}>
@@ -41,7 +48,7 @@ const QRCodeScreen: React.FC = () => {
           </Text>
         </View>
         {qrCodeUrl ? (
-          <QRCode value={qrCodeUrl} size={200} />
+          <View style={styles.qrCodeContainer}>{formatQRCode(qrCodeUrl)}</View>
         ) : (
           <ActivityIndicator size="large" color="#000" />
         )}
@@ -67,7 +74,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     paddingBottom: 80,
-    padding: 40,
+    paddingTop: 80,
+    padding: 0,
     borderRadius: 20,
   },
   containerHeader: {
@@ -77,13 +85,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 10,
     textAlign: 'center',
     ...typography.bold,
   },
   subtitle: {
-    fontSize: 18,
     marginBottom: 10,
     textAlign: 'center',
     ...typography.regular,
@@ -93,6 +100,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     ...typography.light,
+  },
+  qrCodeContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginVertical: 20,
+  },
+  qrChar: {
+    fontSize: 40,
+    textAlign: 'center',
+    margin: 5,
+    borderWidth: 1,
+    borderColor: '#000',
+    padding: 10,
   },
 });
 

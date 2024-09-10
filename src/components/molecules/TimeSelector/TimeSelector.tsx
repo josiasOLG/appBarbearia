@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   timeText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   disabledButton: {
     backgroundColor: '#ccc',

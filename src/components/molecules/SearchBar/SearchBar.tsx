@@ -56,11 +56,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     color: '#12182e',
     fontSize: 20,
+
     marginBottom: 5,
   },
   cardText: {
     color: '#12182e',
-    fontSize: 16,
+    fontSize: 14,
   },
   column1: {
     flex: 3,

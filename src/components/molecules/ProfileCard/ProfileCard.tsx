@@ -50,11 +50,10 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   barberName: {
-    fontSize: 24,
+    fontSize: 18,
     color: '#333',
   },
   barberTitle: {
-    fontSize: 18,
     marginVertical: 5,
     color: '#666',
   },
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   statValue: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   statLabel: {

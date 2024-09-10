@@ -7,6 +7,8 @@ import * as yup from 'yup';
 import FormField from '../../../../components/molecules/FormField/FormField';
 import typography from '../../../../styles/typographys/typography';
 import CustomIcon from '../../../../components/atoms/Icon/Icon';
+import {useSelector} from 'react-redux';
+import colors from '../../../../styles/colors/Colors';
 
 interface CVCModalProps {
   visible: boolean;
@@ -30,6 +32,9 @@ const CVCModal: React.FC<CVCModalProps> = ({visible, onClose, onSubmit}) => {
   } = useForm<CVCFormData>({
     resolver: yupResolver(schema),
   });
+  const user = useSelector((state: any) => state.user);
+  const userRole = user.user.type?.toLowerCase() || 'user';
+  const themeColors = colors[userRole] || colors.user;
 
   const onSubmitHandler: SubmitHandler<CVCFormData> = data => {
     onSubmit(data.security_code);
@@ -38,10 +43,10 @@ const CVCModal: React.FC<CVCModalProps> = ({visible, onClose, onSubmit}) => {
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalContainer}>
-        <TouchableOpacity style={styles.btnClose} onPress={onClose}>
-          <CustomIcon name="close" color="#fff" size={10} />
-        </TouchableOpacity>
         <View style={styles.modalContent}>
+          <TouchableOpacity style={styles.btnClose} onPress={onClose}>
+            <CustomIcon name="close" color="#333" size={30} />
+          </TouchableOpacity>
           <Text style={[styles.title, typography.bold]}>
             Digite o código de segurança
           </Text>
@@ -62,7 +67,7 @@ const CVCModal: React.FC<CVCModalProps> = ({visible, onClose, onSubmit}) => {
               }}
             />
             <TouchableOpacity
-              style={styles.button}
+              style={[styles.button, {backgroundColor: themeColors.primary}]}
               onPress={handleSubmit(onSubmitHandler)}>
               <Text style={[styles.buttonText, typography.regular]}>
                 Prosseguir
@@ -85,8 +90,8 @@ const styles = StyleSheet.create({
   },
   btnClose: {
     position: 'absolute',
-    right: 20,
-    top: 50,
+    right: 10,
+    top: 10,
   },
   modalContent: {
     width: '80%',
@@ -96,12 +101,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 0,
   },
   button: {
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 14,
   },
   contentfooter: {
     display: 'flex',

@@ -1,4 +1,3 @@
-// components/atoms/UpdateCardModal/UpdateCardModal.tsx
 import React from 'react';
 import {Modal, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
@@ -8,6 +7,8 @@ import CreditCardPreview from '../../molecules/CreditCardPreview/CreditCardPrevi
 import typography from '../../../styles/typographys/typography';
 import CustomIcon from '../../atoms/Icon/Icon';
 import FormField from '../../molecules/FormField/FormField';
+import {useSelector} from 'react-redux';
+import {atualizarCartao} from '../../../api/SubscriptionService';
 
 interface UpdateCardModalProps {
   visible: boolean;
@@ -53,10 +54,33 @@ const UpdateCardModal: React.FC<UpdateCardModalProps> = ({
   const expiryYear = watch('expiryYear');
   const cvc = watch('cvc');
   const holderName = watch('holderName');
+  const user = useSelector((state: any) => state.user);
 
-  const handleUpdate: SubmitHandler<UpdateCardFormData> = data => {
-    onUpdate(data.cardNumber, data.expiryMonth, data.expiryYear, data.cvc);
-    onClose();
+  const handleUpdate: SubmitHandler<UpdateCardFormData> = async data => {
+    try {
+      // Chamando a função onUpdate se ela for passada
+      if (onUpdate) {
+        onUpdate(data.cardNumber, data.expiryMonth, data.expiryYear, data.cvc);
+      }
+
+      // Preparando dados para a atualização do cartão
+      const subscriptionData = {
+        cardNumber: data.cardNumber,
+        expiryMonth: data.expiryMonth,
+        expiryYear: data.expiryYear,
+        cvc: data.cvc,
+        email: user.user.email,
+        holderName: user.user.username,
+      };
+
+      // Chamando o método de atualização do cartão
+      await atualizarCartao(subscriptionData);
+
+      // Fechando o modal após atualização
+      onClose();
+    } catch (error) {
+      console.error('Erro ao atualizar cartão:', error);
+    }
   };
 
   return (
@@ -186,13 +210,13 @@ const styles = StyleSheet.create({
   },
   buttonTextLeft: {
     flex: 1,
-    fontSize: 18,
+
     color: '#fff',
     textAlign: 'left',
   },
   buttonTextRight: {
     flex: 1,
-    fontSize: 18,
+
     color: '#fff',
     textAlign: 'right',
   },

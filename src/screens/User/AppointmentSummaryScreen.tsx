@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
   buttonTextLeft: {
     flex: 1,
-    fontSize: 18,
+
     color: '#fff',
     textAlign: 'left',
   },

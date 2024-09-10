@@ -1,5 +1,12 @@
-import React from 'react';
-import {View, StyleSheet, Alert, Text, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Alert,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -20,22 +27,20 @@ interface SubscriptionFormData {
   cardCVC: string;
   holderName: string;
   subscriptionCode?: string;
-  email?: string;
-  cpf?: string;
-  number?: string;
+}
+
+interface SubscriptionFormProp {
+  dataAdress?: any;
 }
 
 const schema = yup.object().shape({
-  cardNumber: yup.string().required('Credit Card Number is required'),
-  cardExpiry: yup.string().required('Credit Card Expiry is required'),
-  cardCVC: yup.string().required('Credit Card CVC is required'),
-  holderName: yup.string().required('Holder Name is required'),
-  email: yup.string().required('Holder Name is required'),
-  cpf: yup.string().required('Holder Name is required'),
-  number: yup.string().required('Holder Name is required'),
+  cardNumber: yup.string().required('Campo obrigatório'),
+  cardExpiry: yup.string().required('Campo obrigatório'),
+  cardCVC: yup.string().required('Campo obrigatório'),
+  holderName: yup.string().required('Campo obrigatório'),
 });
 
-const SubscriptionForm: React.FC = ({}) => {
+const SubscriptionForm: React.FC<SubscriptionFormProp> = ({dataAdress}) => {
   const {
     control,
     handleSubmit,
@@ -49,6 +54,7 @@ const SubscriptionForm: React.FC = ({}) => {
   const service = useSelector((state: any) => state.service);
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigation = useNavigation();
   const cardNumber = watch('cardNumber');
@@ -57,6 +63,7 @@ const SubscriptionForm: React.FC = ({}) => {
   const holderName = watch('holderName');
 
   const handleSubscribe: SubmitHandler<SubscriptionFormData> = async data => {
+    setIsSubmitting(true);
     try {
       const cardData = {
         userId: user.user.id,
@@ -64,18 +71,23 @@ const SubscriptionForm: React.FC = ({}) => {
         cardExpiry: data.cardExpiry,
         cardCvc: data.cardCVC,
         holderName: data.holderName,
-        email: data.email,
-        taxId: data.cpf,
-        number: data.number,
+        email: user.user.email,
+        taxId: dataAdress.cpf,
+        number: dataAdress.phoneNumber,
       };
+      console.log('cardData >>', cardData);
 
       const response = await getCardToken(cardData);
 
       navigation.navigate('ListaCartoesScreen');
-    } catch (error: any) {
-      console.log(error);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  console.log(dataAdress.cpf);
 
   return (
     <View style={styles.container}>
@@ -105,6 +117,7 @@ const SubscriptionForm: React.FC = ({}) => {
         placeholder="Nome no Cartão"
         label="Nome no Cartão de crédito"
         error={errors.holderName?.message}
+        containerStyle={{marginTop: 10}}
       />
       <FormField
         control={control}
@@ -114,6 +127,7 @@ const SubscriptionForm: React.FC = ({}) => {
         keyboardType="numeric"
         placeholder="0000 0000 0000 0000"
         maskType="credit-card"
+        containerStyle={{marginTop: 10}}
       />
       <View style={styles.row}>
         <View style={styles.halfWidth}>
@@ -126,6 +140,7 @@ const SubscriptionForm: React.FC = ({}) => {
             placeholder="MM/YY"
             maskType="datetime"
             options={{format: 'MM/YYYY'}}
+            containerStyle={{marginTop: 10}}
           />
         </View>
         <View style={styles.halfWidth}>
@@ -137,48 +152,27 @@ const SubscriptionForm: React.FC = ({}) => {
             keyboardType="numeric"
             placeholder="000"
             secureTextEntry
+            containerStyle={{marginTop: 10}}
           />
         </View>
       </View>
 
-      <FormField
-        control={control}
-        name="email"
-        label="Email"
-        error={errors.cardNumber?.message}
-        keyboardType="email-address"
-        placeholder="Email"
-      />
-
-      <FormField
-        control={control}
-        name="cpf"
-        label="CPF"
-        error={errors.cardNumber?.message}
-        keyboardType="numeric"
-        placeholder="CPF"
-        maskType="cpf"
-      />
-
-      <FormField
-        control={control}
-        name="number"
-        label="Telefone"
-        error={errors.cardNumber?.message}
-        keyboardType="numeric"
-        placeholder="Telefone"
-        maskType="cel-phone"
-      />
       <View>
         <TouchableOpacity
           style={[styles.button, {backgroundColor: themeColors.primary}]}
-          onPress={handleSubmit(handleSubscribe)}>
-          <Text style={[styles.buttonTextLeft, typography.extraLightItalic]}>
-            Cadastrar cartão
-          </Text>
-          <Text style={[styles.buttonTextRight, typography.boldItalic]}>
-            <CustomIcon name="credit-card" size={20} color="#fff" />
-          </Text>
+          onPress={handleSubmit(handleSubscribe)}
+          disabled={isSubmitting}>
+          {isSubmitting ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <>
+              <Text
+                style={[styles.buttonTextLeft, typography.extraLightItalic]}>
+                Cadastrar cartão
+              </Text>
+              <CustomIcon name="credit-card" size={20} color="#fff" />
+            </>
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -192,7 +186,7 @@ const styles = StyleSheet.create({
   cardPreview: {
     borderRadius: 8,
     padding: 16,
-    marginBottom: 24,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOpacity: 0.2,
     shadowOffset: {width: 0, height: 4},
@@ -209,7 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardNumber: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
     color: '#fff',
@@ -222,13 +216,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   cardExpiry: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#fff',
     flex: 1,
     textAlign: 'left',
   },
   cardCVC: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#fff',
     flex: 1,
     textAlign: 'right',

@@ -24,16 +24,12 @@ const ServiceItem: React.FC<ServiceItemProps> = ({service, icon, onPress}) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.user.secondary,
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.user.white,
     padding: 20,
     margin: 10,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
     width: 150,
   },
   container: {
@@ -49,7 +45,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#fff',
   },

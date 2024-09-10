@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {Controller, Control} from 'react-hook-form';
 import {TextInputMask, TextInputMaskProps} from 'react-native-masked-text';
-import {BlurView} from '@react-native-community/blur';
 import Label from '../../atoms/Label/Label';
 import InputField from '../../atoms/InputField/InputField';
 import typography from '../../../styles/typographys/typography';
@@ -43,6 +42,8 @@ interface FormFieldProps {
   labelColor?: string;
   inputStyle?: TextStyle;
   containerStyle?: ViewStyle;
+  defaultValue?: string;
+  disabled?: boolean;
 }
 
 const FormField: React.FC<FormFieldProps> = ({
@@ -57,11 +58,13 @@ const FormField: React.FC<FormFieldProps> = ({
   labelColor,
   inputStyle,
   containerStyle,
+  defaultValue,
+  disabled,
   ...props
 }) => {
   const inputCustomStyle = {
     color: colorText,
-    backgroundColor: backgroundColor,
+    backgroundColor: disabled ? '#d3d3d3' : backgroundColor,
   };
 
   const labelCustomStyle = {
@@ -79,6 +82,7 @@ const FormField: React.FC<FormFieldProps> = ({
         <Controller
           control={control}
           name={name}
+          defaultValue={defaultValue} // Set default value
           render={({field: {onChange, onBlur, value}}) =>
             maskType ? (
               <TextInputMask
@@ -86,10 +90,11 @@ const FormField: React.FC<FormFieldProps> = ({
                 options={options}
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
+                value={value ?? defaultValue} // Ensure defaultValue is used
                 customTextInput={InputField}
                 customTextInputProps={{
                   error: error,
+                  editable: !disabled,
                   ...props,
                   style: [styles.input, inputCustomStyle, inputStyle],
                 }}
@@ -98,8 +103,9 @@ const FormField: React.FC<FormFieldProps> = ({
               <InputField
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
+                value={value ?? defaultValue} // Ensure defaultValue is used
                 error={error}
+                editable={!disabled}
                 style={[styles.input, inputCustomStyle, inputStyle]}
                 {...props}
               />
@@ -115,11 +121,11 @@ export default FormField;
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: 20,
+    marginBottom: 0,
   },
   label: {
     fontSize: 13,
-    marginTop: 10,
+    marginTop: 0,
     marginBottom: 5,
     color: '#333',
     ...typography.regular,

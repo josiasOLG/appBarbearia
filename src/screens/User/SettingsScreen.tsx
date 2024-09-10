@@ -41,7 +41,7 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
       <CustomIcon
         name={icon}
         color={themeColors.white}
-        size={10}
+        size={15}
         type="font-awesome"
       />
     </View>
@@ -71,25 +71,25 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({navigation}) => {
       id: '1',
       title: 'Notificações',
       description: 'Gerencie suas notificações',
-      screen: 'Notifications',
+      screen: 'NotificationScreen',
       icon: 'bell',
     },
     {
-      id: '2',
+      id: '3',
       title: 'Perfil',
       description: 'Veja e edite seu perfil',
       screen: 'ProfileScreen',
       icon: 'user',
     },
     {
-      id: '3',
+      id: '4',
       title: 'Segurança',
       description: 'Configurações de segurança',
-      screen: 'Security',
+      screen: 'SecurityScreen',
       icon: 'shield',
     },
     {
-      id: '4',
+      id: '5',
       title: 'Endereço',
       description: 'Gerencie seus endereços',
       screen: 'CadastrarEnderecoScreen',
@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userName: {
-    fontSize: 18,
     textTransform: 'capitalize',
   },
   userEmail: {
@@ -200,7 +199,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   flatListContent: {
-    padding: 20,
+    padding: 15,
   },
   settingsItem: {
     flexDirection: 'row',
@@ -221,21 +220,21 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   settingsItemTitle: {
-    fontSize: 16,
+    fontSize: 14,
   },
   settingsItemDescription: {
     fontSize: 14,
     color: '#666',
   },
   footer: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 25,
     paddingVertical: 30,
     borderTopWidth: 1,
     borderTopColor: '#ccc',
     alignItems: 'flex-start',
   },
   planText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#666',
   },
   planViews: {
@@ -251,7 +250,7 @@ const styles = StyleSheet.create({
   },
   upgradeButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
   },
   logoutButton: {
     flexDirection: 'row',
@@ -260,7 +259,7 @@ const styles = StyleSheet.create({
   },
   logoutButtonText: {
     color: '#333',
-    fontSize: 16,
+    fontSize: 14,
     marginLeft: 10,
   },
 });

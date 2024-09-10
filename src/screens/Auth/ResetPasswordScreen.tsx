@@ -182,12 +182,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 16,
   },
   subTitle: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
     textAlign: 'center',
   },

@@ -131,9 +131,9 @@ const Calendar: React.FC<CalendarProps> = ({
           textDayFontWeight: '300',
           textMonthFontWeight: 'bold',
           textDayHeaderFontWeight: '300',
-          textDayFontSize: 16,
-          textMonthFontSize: 16,
-          textDayHeaderFontSize: 16,
+          textDayfontSize: 14,
+          textMonthfontSize: 14,
+          textDayHeaderfontSize: 14,
         }}
         markingType={'custom'}
         markedDates={markedDates}

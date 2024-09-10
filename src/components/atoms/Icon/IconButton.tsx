@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import typography from '../../../styles/typographys/typography';
 import {useSelector} from 'react-redux';
 import colors from '../../../styles/colors/Colors';
+import CustomIcon from './Icon';
 
 interface IconButtonProps {
   onPress: () => void;
@@ -24,7 +25,7 @@ const IconButton: React.FC<IconButtonProps> = ({
     <TouchableOpacity
       style={StyleSheet.flatten([styles.button, style])}
       onPress={onPress}>
-      {/* <Icon name={iconName} size={20} color={textColor} /> */}
+      <CustomIcon name={iconName} size={20} color={textColor} type="feather" />
       <Text style={[styles.text, typography.bold, {color: textColor}]}>
         {text}
       </Text>

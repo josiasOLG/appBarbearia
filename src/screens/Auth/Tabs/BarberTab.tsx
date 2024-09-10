@@ -94,8 +94,15 @@ const BarberTab: React.FC<any> = () => {
           response.headers['access-token'],
         );
 
-        const {userId, username, descricao, certificacoes, image, email} =
-          response.data;
+        const {
+          userId,
+          username,
+          descricao,
+          certificacoes,
+          image,
+          email,
+          active,
+        } = response.data;
 
         dispatch(
           setUser({
@@ -107,6 +114,7 @@ const BarberTab: React.FC<any> = () => {
             image: image || '',
             isLoggedIn: true,
             type: 'BARBER',
+            active: active,
           }),
         );
         dispatch(hideLoading());
@@ -161,6 +169,7 @@ const BarberTab: React.FC<any> = () => {
         certificacoes,
         image,
         email,
+        active,
       } = response.data;
 
       await Keychain.setGenericPassword(
@@ -185,6 +194,7 @@ const BarberTab: React.FC<any> = () => {
           descricao: descricao,
           certificacoes: certificacoes,
           image: image,
+          active: active,
         }),
       );
 
@@ -291,6 +301,8 @@ const BarberTab: React.FC<any> = () => {
           onChangeInput={setModalInput}
           onClose={() => setShowModal(false)}
           onSubmit={handleModalSubmit}
+          submitButtonText="Enviar"
+          closeButtonText="Fechar"
         />
       </View>
     </>

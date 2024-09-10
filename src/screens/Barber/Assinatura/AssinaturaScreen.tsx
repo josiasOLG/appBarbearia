@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,14 +6,21 @@ import {
   ActivityIndicator,
   Alert,
   StatusBar,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
 import SubscriptionOptions from '../../../components/organisms/SubscriptionOptions/SubscriptionOptions';
 import PrimaryButton from '../../../components/atoms/PrimaryButton/PrimaryButton';
 import LinearGradient from 'react-native-linear-gradient';
-import {getPlans} from '../../../api/SubscriptionService';
+import {assinantes, getPlans} from '../../../api/SubscriptionService';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSelectedPlanId} from '../../../store/reducers/plan.reducer';
 import colors from '../../../styles/colors/Colors';
+import LottieView from 'lottie-react-native';
+import typography from '../../../styles/typographys/typography';
+import upgradeAnimation from '../../../assets/lottie/lottie-login.json';
+import CustomIcon from '../../../components/atoms/Icon/Icon';
+import {useFocusEffect} from '@react-navigation/native';
 
 interface Plan {
   id: string;
@@ -31,6 +38,7 @@ const AssinaturaScreen: React.FC = ({navigation}) => {
   const service = useSelector((state: any) => state.service);
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
+
   useEffect(() => {
     const fetchPlans = async () => {
       try {
@@ -54,6 +62,26 @@ const AssinaturaScreen: React.FC = ({navigation}) => {
     fetchPlans();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      const fetchSubscribers = async () => {
+        try {
+          const userId = user?.user?.id; // Substitua pelo ID do usuário real
+          const data = await assinantes(userId);
+          if (data) {
+            navigation.navigate('AssinaturaStatus');
+          }
+        } catch (error) {
+          console.log('AssinaturaScreen >> ', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchSubscribers();
+    }, [user]),
+  );
+
   const handleOptionSelect = (item: any) => {
     dispatch(setSelectedPlanId(item));
   };
@@ -76,11 +104,40 @@ const AssinaturaScreen: React.FC = ({navigation}) => {
       style={styles.gradient}>
       <StatusBar backgroundColor={themeColors.primary} />
       <ScrollView contentContainerStyle={styles.container}>
+        <LottieView
+          source={upgradeAnimation}
+          autoPlay
+          loop
+          style={styles.lottie}
+        />
+        <Text style={[styles.title, typography.bold]}>
+          Escolha o Plano Ideal para Você!
+        </Text>
+        <Text style={[styles.description, typography.regular]}>
+          Selecione entre os planos Mensal, Trimestral ou Anual e aproveite
+          todas as vantagens exclusivas!
+        </Text>
         <SubscriptionOptions
           options={options}
           onOptionSelect={handleOptionSelect}
         />
-        <PrimaryButton onPress={handleSubscribe} text="Assinar" />
+
+        <View style={styles.bottomButtonContainer}>
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: themeColors.white}]}
+            onPress={handleSubscribe}>
+            <Text style={[styles.buttonTextLeft, typography.boldItalic]}>
+              Prosseguir
+            </Text>
+            <CustomIcon
+              name="arrow-forward"
+              color="#333"
+              size={20}
+              type="material"
+              style={styles.buttonTextRight}
+            />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </LinearGradient>
   );
@@ -92,13 +149,67 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    padding: 16,
+    padding: 20,
+    alignItems: 'center',
   },
   loaderContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#4231a4',
+  },
+  lottie: {
+    width: 150,
+    height: 150,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 10,
+    color: '#fff',
+  },
+  description: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#fff',
+  },
+  bottomButtonContainer: {
+    flex: 1,
+    width: '100%',
+    marginTop: 40,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+    paddingVertical: 20,
+    backgroundColor: '#4231a4',
+    borderRadius: 50,
+  },
+  buttonTextLeft: {
+    flex: 1,
+
+    color: '#333',
+    textAlign: 'left',
+  },
+  buttonTextRight: {
+    flex: 1,
+
+    color: '#333',
+    textAlign: 'right',
+  },
+  contentTextoSelecione: {
+    paddingTop: 20,
+  },
+  contentTextoSelecioneTexto: {
+    fontSize: 14,
+  },
+  contentTextoSelecioneTexto2: {
+    fontSize: 14,
+    marginTop: 5,
   },
 });
 

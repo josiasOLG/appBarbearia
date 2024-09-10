@@ -106,26 +106,27 @@ const ValidateCodeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     padding: 16,
   },
   title: {
     color: '#fff',
-    fontSize: 24,
-    marginBottom: 16,
+    fontSize: 18,
+    marginBottom: 0,
+    marginTop: 20,
   },
   subTitle: {
     color: '#fff',
     fontSize: 18,
-    marginBottom: 80,
+    marginBottom: 20,
     lineHeight: 30,
     textAlign: 'center',
   },
   codeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 0,
   },
   input: {
     width: 50,

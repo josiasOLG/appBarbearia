@@ -108,11 +108,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   balanceTitle: {
-    fontSize: 18,
     color: '#333',
   },
   balancePoints: {
-    fontSize: 32,
+    fontSize: 18,
     color: '#333',
   },
   loadingContainer: {

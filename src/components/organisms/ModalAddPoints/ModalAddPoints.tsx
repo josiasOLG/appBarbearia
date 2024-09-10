@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   modalDescription: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
   },
   modalButtons: {
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 14,
   },
 });
 

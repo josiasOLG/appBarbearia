@@ -90,18 +90,18 @@ const styles = StyleSheet.create({
   },
   serviceText: {
     color: '#ffffff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
   pointsText: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 12,
     textTransform: 'uppercase',
   },
   descriptionText: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 12,
     marginTop: 5,
   },
   cardFooter: {

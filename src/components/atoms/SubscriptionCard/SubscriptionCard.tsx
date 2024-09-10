@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import typography from '../../../styles/typographys/typography';
 import {useSelector} from 'react-redux';
 import colors from '../../../styles/colors/Colors';
+import CustomIcon from '../Icon/Icon';
 
 interface SubscriptionCardProps {
   title: string;
@@ -21,7 +22,6 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   onPress,
 }) => {
   const user = useSelector((state: any) => state.user);
-  const service = useSelector((state: any) => state.service);
   const userRole = user.user.type?.toLowerCase() || 'user';
   const themeColors = colors[userRole] || colors.user;
   return (
@@ -30,56 +30,59 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
         styles.card,
         {
           backgroundColor: selected
+            ? themeColors.azul_roxo_claro
+            : themeColors.white,
+          borderColor: selected
             ? themeColors.primary
-            : themeColors.secondary,
+            : themeColors.azul_roxo_claro,
         },
       ]}
       onPress={onPress}>
-      <View style={styles.iconColumn}>
-        <Icon name={iconName} size={40} color="#fff" />
-      </View>
-      <View style={styles.textColumn}>
-        <Text style={[styles.title, typography.bold]}>{title}</Text>
-        <Text style={[styles.description, typography.light]}>
-          {description}
-        </Text>
-      </View>
+      <CustomIcon
+        name="calendar-today"
+        color={selected ? themeColors.white : themeColors.black}
+        size={40}
+        type="material"
+      />
+      <Text
+        style={[
+          styles.title,
+          typography.bold,
+          {color: selected ? themeColors.white : themeColors.black},
+        ]}>
+        {title}
+      </Text>
+      <Text
+        style={[
+          styles.description,
+          typography.regular,
+          {color: selected ? themeColors.white : themeColors.black},
+        ]}>
+        {description}
+      </Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: 'row',
-    height: 100,
-    borderRadius: 15,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-    marginVertical: 10,
+    flexDirection: 'column',
+    width: 100,
+    borderRadius: 10,
+    padding: 10,
+    borderWidth: 1,
     alignItems: 'center',
-  },
-  iconColumn: {
-    marginRight: 20,
-  },
-  textColumn: {
-    flex: 1,
-    justifyContent: 'center',
+    marginHorizontal: 20,
   },
   title: {
-    color: '#fff',
-    fontSize: 20,
+    fontSize: 14,
     marginBottom: 5,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginTop: 10,
   },
   description: {
-    color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
   },
 });
 

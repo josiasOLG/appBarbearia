@@ -1,5 +1,13 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, FlatList, StatusBar} from 'react-native';
+import React, {useState, FC} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  StatusBar,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 import ServiceItem from '../../components/atoms/ServiceItem/ServiceItem';
 import LinearGradient from 'react-native-linear-gradient';
 import EcoIcon from '../../assets/icons/eco.svg';
@@ -11,35 +19,39 @@ import LoadingScreen from './LoadingScreen';
 import {setUser} from '../../store/reducers/user.reducer';
 import {setSelectedService} from '../../store/reducers/service.reducer';
 
-const services = [
+interface Service {
+  id: string;
+  service: string;
+  icon: string;
+}
+
+const services: Service[] = [
   {id: 'BARBER', service: 'Barbeiro', icon: 'face'},
   {id: 'STYLIST', service: 'Cabelereiro(a)', icon: 'content-cut'},
 ];
 
-const ServiceSelectionScreen = () => {
-  const user = useSelector((state: any) => state.user);
+const ServiceSelectionScreen: FC = () => {
+  const user = useSelector((state: {user: {user: {id: string}}}) => state.user);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
-  const handleServicePress = async (service: any) => {
+
+  const handleServicePress = async (service: Service) => {
     try {
       setIsLoading(true);
       await UserService.updateUserService(user.user.id, service.id);
       dispatch(setSelectedService(service.id));
       navigation.navigate('HomeScreen');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setIsLoading(false);
     }
   };
-  const handleLoginSuccess = () => {};
-
-  const handleLoginError = (errorMessage: string) => {};
 
   return (
-    <LinearGradient colors={['#7b67e9', '#624ed1']} style={styles.container}>
-      <StatusBar backgroundColor={'#7b67e9'} />
-      <EcoIcon style={styles.iconBack} />
+    <LinearGradient colors={['#333', '#333']} style={styles.container}>
+      <StatusBar backgroundColor={'#333'} />
+      <EcoIcon width={24} height={24} style={styles.iconBack} />
       <View style={styles.header}>
         <Text style={[styles.title, typography.bold]}>
           Selecione um Serviço
@@ -65,13 +77,7 @@ const ServiceSelectionScreen = () => {
         numColumns={2}
         contentContainerStyle={styles.list}
       />
-      <LoadingScreen
-        visible={isLoading}
-        onSuccess={handleLoginSuccess}
-        onError={handleLoginError}
-        successScreen="HomeScreen"
-        errorScreen="LoginScreen"
-      />
+      <LoadingScreen visible={isLoading} />
     </LinearGradient>
   );
 };
@@ -85,15 +91,15 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 20,
-    marginTop: 100,
+    marginTop: StatusBar.currentHeight || 0 + 20,
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     color: '#fff',
     marginBottom: 10,
+    marginTop: 40,
   },
   subtitle: {
-    fontSize: 18,
     color: '#fff',
     marginBottom: 5,
   },
@@ -106,12 +112,12 @@ const styles = StyleSheet.create({
   list: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 100,
+    marginTop: 50,
   },
   iconBack: {
     position: 'absolute',
-    opacity: 0.3,
-    top: 0,
+    top: StatusBar.currentHeight || 0 + 10,
+    left: 10,
   },
 });
 

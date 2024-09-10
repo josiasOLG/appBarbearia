@@ -18,6 +18,20 @@ import ProfileScreen from '../screens/base/ProfileScreen';
 import ConfirmationScreen from '../screens/Barber/ConfirmationScreen';
 import SettingsBarberScreen from '../screens/Barber/SettingsBarberScreen';
 import QRCodeScannerScreen from '../screens/Barber/QRCodeScannerScreen';
+import FeedbackScreen from '../screens/Barber/FeedbackScreen';
+import SecurityScreen from '../screens/base/SecurityItem';
+import ReportScreen from '../screens/Barber/ReportScreen';
+import PDFViewer from '../screens/Barber/PDFViewer';
+import ResetPasswordBarberScreen from '../screens/Barber/ResetPasswordBarberScreen';
+import BiometricScreen from '../screens/base/BiometricScreen';
+import ValidateCodeBarberScreen from '../screens/Barber/ValidateCodeBarberScreen';
+import NotificationScreen from '../screens/base/NotificationScreen';
+import AssinaturaScreen from '../screens/Barber/Assinatura/AssinaturaScreen';
+import ListaCartoesScreen from '../screens/Barber/Assinatura/ListaCartoesScreen';
+import AssinaturaStatus from '../screens/Barber/Assinatura/AssinaturaStatus';
+import CadastrarCartaoScreen from '../screens/Barber/Assinatura/CadastrarCartaoScreen';
+import PixScreen from '../screens/Barber/Assinatura/PixScreen';
+
 const BarberStack = createStackNavigator();
 
 export const BarberStackNavigator = () => {
@@ -30,6 +44,12 @@ export const BarberStackNavigator = () => {
       <BarberStack.Screen
         name="BarberHome"
         component={BarberHomeScreen}
+        options={{...noHeaderOption, ...hiddenBackButtonOption}}
+      />
+      <BarberStack.Screen
+        name="BiometricScreen"
+        component={BiometricScreen}
+        initialParams={{userType: user.type}}
         options={{...noHeaderOption, ...hiddenBackButtonOption}}
       />
       <BarberStack.Screen
@@ -50,6 +70,20 @@ export const BarberStackNavigator = () => {
           headerTintColor: '#fff',
         }}
       />
+      <BarberStack.Screen
+        name="SecurityScreen"
+        component={SecurityScreen}
+        options={{
+          headerTitle: 'Segurança',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+
       <BarberStack.Screen
         name="CadastrarEnderecoScreen"
         component={CadastrarEnderecoScreen}
@@ -93,7 +127,7 @@ export const BarberStackNavigator = () => {
         name="ConfirmationScreen"
         component={ConfirmationScreen}
         options={{
-          headerTitle: 'Perfil',
+          headerTitle: 'Agendamento',
           headerStyle: [
             styles.headerTransparent,
             {backgroundColor: themeColors.primary},
@@ -106,13 +140,145 @@ export const BarberStackNavigator = () => {
         name="QRCodeScannerScreen"
         component={QRCodeScannerScreen}
         options={{
-          headerTitle: 'Qr code',
+          headerTitle: 'Código',
           headerStyle: [
             styles.headerTransparent,
             {backgroundColor: themeColors.primary},
           ],
           headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
           headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="FeedbackScreen"
+        component={FeedbackScreen}
+        options={{
+          headerTitle: 'Feedback',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="ReportScreen"
+        component={ReportScreen}
+        options={{
+          headerTitle: 'Relatórios',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="PDFViewer"
+        component={PDFViewer}
+        options={{
+          headerTitle: 'Relatórios',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="ResetPasswordBarberScreen"
+        component={ResetPasswordBarberScreen}
+        options={{
+          headerTitle: 'Mudar senha',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="ValidateCodeBarberScreen"
+        component={ValidateCodeBarberScreen}
+        options={{
+          headerTitle: 'Mudar senha',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="NotificationScreen"
+        component={NotificationScreen}
+        options={{
+          headerTitle: 'Notificações',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+
+      {/* <BarberStack.Screen
+        name="AssinaturaScreen"
+        component={AssinaturaScreen}
+        options={{
+          headerTitle: 'Assinaturas',
+          headerStyle: [
+            styles.headerTransparent,
+            {backgroundColor: themeColors.primary},
+          ],
+          headerTitleStyle: [styles.headerTitleWhite, typography.semiBold],
+          headerTintColor: '#fff',
+        }}
+      />
+      <BarberStack.Screen
+        name="ListaCartoesScreen"
+        component={ListaCartoesScreen}
+        options={{
+          headerTitle: 'Assinaturas',
+          headerStyle: styles.headerWhite,
+          headerTitleStyle: [styles.headerTitle, typography.semiBold],
+          headerTintColor: '#333',
+        }}
+      />
+      <BarberStack.Screen
+        name="AssinaturaStatus"
+        component={AssinaturaStatus}
+        options={{
+          headerTitle: 'Assinaturas',
+          headerStyle: styles.headerWhite,
+          headerTitleStyle: styles.headerTitle,
+          headerTintColor: '#333',
+        }}
+      />
+      <BarberStack.Screen
+        name="CadastrarCartaoScreen"
+        component={CadastrarCartaoScreen}
+        options={{
+          headerTitle: 'Cadastrar cartão',
+          headerStyle: styles.headerWhite,
+          headerTitleStyle: [styles.headerTitle, typography.semiBold],
+          headerTintColor: '#333',
+        }}
+      /> */}
+      <BarberStack.Screen
+        name="PixScreen"
+        component={PixScreen}
+        options={{
+          headerTitle: 'Qr code',
+          headerStyle: styles.headerWhite,
+          headerTitleStyle: [styles.headerTitle, typography.semiBold],
+          headerTintColor: '#333',
         }}
       />
     </BarberStack.Navigator>
@@ -131,12 +297,12 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#333',
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   headerTitleWhite: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

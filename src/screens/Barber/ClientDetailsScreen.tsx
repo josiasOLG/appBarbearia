@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     color: '#fff',
     marginBottom: 10,
   },
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   historyText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#fff',
   },
 });

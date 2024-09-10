@@ -17,9 +17,9 @@ const CustomIcon: React.FC<IconProps> = ({
   style,
   type = 'font-awesome',
 }) => {
-  const iconStyle = [styles.icon, {fontSize: size, color}, style];
-
-  return <Icon name={name} color={color} type={type} style={iconStyle} />;
+  return (
+    <Icon name={name} size={size} color={color} type={type} style={style} />
+  );
 };
 
 const styles = StyleSheet.create({

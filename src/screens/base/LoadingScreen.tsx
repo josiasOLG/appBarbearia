@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   loadingText: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#624ED1',
   },
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   bottomSection: {},
   messageText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#624ED1',
   },
 });
