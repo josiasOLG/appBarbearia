@@ -57,3 +57,11 @@ export const renewSubscription = async (subscriptionData: any) => {
   );
   return response.data;
 };
+
+export const atualizarCartao = async (subscriptionData: any) => {
+  const response = await ApiClient.put(
+    `/subscription/atualizar/cartao`,
+    subscriptionData,
+  );
+  return response.data;
+};

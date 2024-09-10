@@ -8,6 +8,7 @@ export interface User {
   descricao?: string;
   image?: string;
   certificacoes?: string;
+  active?: boolean;
 }
 
 export interface UserState {

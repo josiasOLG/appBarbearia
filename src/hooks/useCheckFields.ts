@@ -1,6 +1,7 @@
 import {useState, useCallback} from 'react';
 import {getAddressByUserId} from '../api/AddressService';
 import {UserService} from '../api/UserService';
+import {useSelector} from 'react-redux';
 
 const useCheckFields = (userId: string) => {
   const [modalVisible, setModalVisible] = useState(false);

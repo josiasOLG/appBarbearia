@@ -20,9 +20,14 @@ const getAllServicePerfils = async (barberId: string) => {
   return ApiClient.get(`/barber-services/services/${barberId}`);
 };
 
+const getAllServices = async () => {
+  return ApiClient.get('/services');
+};
+
 export const BarberService = {
   getServices,
   addService,
   deleteService,
   getAllServicePerfils,
+  getAllServices,
 };

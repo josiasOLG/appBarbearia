@@ -3,9 +3,9 @@ import * as Keychain from 'react-native-keychain';
 import {API_BASE_URL} from '@env';
 
 const API_BASE = API_BASE_URL;
-console.log('API_BASE_URL >>', API_BASE);
+
 const ApiClient = axios.create({
-  baseURL: API_BASE,
+  baseURL: API_BASE || 'https://apib-arbearia.vercel.app',
 });
 
 ApiClient.interceptors.request.use(async config => {

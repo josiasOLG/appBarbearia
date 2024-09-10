@@ -15,6 +15,10 @@ const updateQRCode = async (id: string, updateData: any) => {
   return ApiClient.put(`/qrcode/${id}`, updateData);
 };
 
+const updateQRCodeBarberId = async (id: string, updateData: any) => {
+  return ApiClient.put(`/qrcode/updateByBarberIdAndCode/${id}`, updateData);
+};
+
 const deleteQRCode = async (id: string) => {
   return ApiClient.delete(`/qrcode/${id}`);
 };
@@ -29,4 +33,5 @@ export const QRCodeServices = {
   updateQRCode,
   deleteQRCode,
   getQRCodesByUserId,
+  updateQRCodeBarberId,
 };

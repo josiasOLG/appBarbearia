@@ -1,8 +1,8 @@
 const colors = {
   user: {
-    primary: '#7b67e9',
+    primary: '#333',
     primaryblack: '#4231a4',
-    secondary: '#624ed1',
+    secondary: '#333',
     accent: '#fc7115',
     black: '#333',
     white: '#fff',
@@ -10,8 +10,12 @@ const colors = {
     vermelho: '#E91E13',
     gold: '#FFD700',
     goldenrod: '#DAA520',
+    rosa_avermelhado: '#e9677b',
+    rosa: '#e967c4',
+    azul_roxo: '#6a67e9',
+    azul_roxo_claro: '#7b67f3',
   },
-  barber: {
+  barber2: {
     primary: '#4CAF50',
     primaryblack: '#2E7D32',
     secondary: '#333',
@@ -22,6 +26,23 @@ const colors = {
     vermelho: '#E91E13',
     gold: '#FFD700',
     goldenrod: '#DAA520',
+    _claro: '#f1faf2',
+  },
+  barber: {
+    primary: '#333',
+    primaryblack: '#4231a4',
+    secondary: '#333',
+    accent: '#fc7115',
+    black: '#333',
+    white: '#fff',
+    verde: '#50C878',
+    vermelho: '#E91E13',
+    gold: '#FFD700',
+    goldenrod: '#DAA520',
+    rosa_avermelhado: '#e9677b',
+    rosa: '#e967c4',
+    azul_roxo: '#6a67e9',
+    azul_roxo_claro: '#7b67f3',
   },
   stylist: {
     primary: '#E91E63',

@@ -12,3 +12,8 @@ export const updateAddress = async (userId: string, addressData: any) => {
   );
   return response.data;
 };
+
+export const getCep = async (cep: any) => {
+  const response = await ApiClient.get(`/addresses/cep/${cep}`);
+  return response.data;
+};

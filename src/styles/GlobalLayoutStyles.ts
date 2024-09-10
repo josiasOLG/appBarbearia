@@ -61,7 +61,7 @@ export const GlobalLayoutStyles = StyleSheet.create({
   },
   cardText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     marginTop: 8,
   },
 });
